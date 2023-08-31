@@ -2,26 +2,113 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+.bg-dark-1 {
+  @apply bg-black text-white;
+}
+.bg-dark-2 {
+  background-color: #090909;
+}
+.dark{
+  @apply bg-slate-900
+}
+/* main classes */
+.activity-card {
+  @apply flex items-center gap-2 rounded-md bg-dark-2 px-7 py-4;
+}
+.head-text{
+  @apply text-2xl font-bold
+}
+.main-container {
+  @apply flex min-h-screen flex-1 flex-col items-center bg-dark-1 px-6 pb-10 pt-28 max-md:pb-32 sm:px-10;
+}
+.topbar {
+  @apply fixed top-0 z-30 flex w-full items-center justify-between bg-dark-2 px-6 py-3;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+.leftsidebar {
+  @apply sticky left-0 top-0 z-20 flex h-screen w-fit flex-col justify-between overflow-auto border-r border-r-slate-900 bg-dark-2 pb-5 pt-28 max-md:hidden;
+}
+
+.leftsidebar_link {
+  @apply relative flex justify-start gap-4 rounded-lg p-4;
+}
+.bottombar{
+  @apply fixed bottom-0 z-10 w-full rounded-t-3xl  p-4 backdrop-blur-lg  md:hidden;
+}
+
+.bottombar_container{
+  @apply flex items-center justify-between gap-3;
+}
+
+.bottombar_link{
+  @apply relative flex flex-col items-center gap-2 rounded-lg p-2 sm:flex-1 sm:px-2 sm:py-2.5;
+}
+  .pagination {
+    @apply mt-10 flex w-full items-center justify-center gap-5;
+  }
+
+  .rightsidebar{
+    @apply sticky right-0 top-0 z-20 flex h-screen w-fit flex-col justify-between gap-12 overflow-auto border-l border-l-slate-900 bg-dark-2 px-10 pb-6 pt-28 max-xl:hidden;
+  }
+  .thread-card_bar {
+    @apply relative mt-2 w-0.5 grow rounded-full bg-neutral-800;
+  }
+
+@layer utilities {
+  .css-invert {
+    @apply invert-[50%] brightness-200;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 3px;
+    height: 3px;
+    border-radius: 2px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: #09090a;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #5c5c7b;
+    border-radius: 50px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #7878a3;
   }
 }
+/* shadcn */
+.account-form_image-label {
+  @apply flex h-24 w-24 items-center justify-center rounded-full bg-slate-900 !important;
+}
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+.account-form-image-input {
+  @apply cursor-pointer file:text-blue-700 border-none bg-transparent outline-none  !important;
+}
+
+.account-form-input{
+  @apply border border-slate-900 bg-dark-1 outline-none  !important;
+}
+.tab {
+  @apply flex min-h-[50px] flex-1 items-center gap-3 bg-dark-2 text-gray-800 data-[state=active]:bg-[#0e0e12] data-[state=active]:text-gray-800 !important;
+}
+.user-card {
+  @apply flex flex-col justify-between gap-4 ;
+}
+
+.user-card_avatar {
+  @apply flex flex-1 items-start justify-start gap-3 ;
+}
+
+.user-card_btn {
+  @apply hover:bg-slate-900 h-auto min-w-[74px] rounded-lg bg-blue-500 text-[12px] text-white transition !important;
+}
+
+.searchbar {
+  @apply flex gap-1 rounded-lg bg-dark-2 px-4 py-2;
+}
+
+.searchbar_input {
+  @apply border-none bg-dark-2 text-lg text-gray-600 outline-none !important;
 }
