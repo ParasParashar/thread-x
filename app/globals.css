@@ -3,10 +3,14 @@
 @tailwind utilities;
 
 .bg-dark-1 {
-  @apply bg-black text-white;
+  /* @apply bg-black text-white; */
+  @apply bg-[#090909] text-white;
 }
 .bg-dark-2 {
-  background-color: #090909;
+  /* background-color: #0a0112; */
+  /* background-color: #130223;/ */
+  background-color: #090909; 
+
 }
 .dark{
   @apply bg-slate-900
@@ -22,11 +26,11 @@
   @apply flex min-h-screen flex-1 flex-col items-center bg-dark-1 px-6 pb-10 pt-28 max-md:pb-32 sm:px-10;
 }
 .topbar {
-  @apply fixed top-0 z-30 flex w-full items-center justify-between bg-dark-2 px-6 py-3;
+  @apply fixed top-0 z-30 flex w-full items-center justify-between px-6 py-3 backdrop-blur-lg;
 }
 
 .leftsidebar {
-  @apply sticky left-0 top-0 z-20 flex h-screen w-fit flex-col justify-between overflow-auto border-r border-r-slate-900 bg-dark-2 pb-5 pt-28 max-md:hidden;
+  @apply  sticky rounded-r-2xl left-0 top-0 z-20 flex h-screen w-fit flex-col justify-between overflow-auto border-r-[3px] border-[#262626] bg-dark-2 pb-5 pt-28 max-md:hidden;
 }
 
 .leftsidebar_link {
@@ -47,11 +51,15 @@
     @apply mt-10 flex w-full items-center justify-center gap-5;
   }
 
-  .rightsidebar{
-    @apply sticky right-0 top-0 z-20 flex h-screen w-fit flex-col justify-between gap-12 overflow-auto border-l border-l-slate-900 bg-dark-2 px-10 pb-6 pt-28 max-xl:hidden;
-  }
   .thread-card_bar {
     @apply relative mt-2 w-0.5 grow rounded-full bg-neutral-800;
+  }
+  .community-card{
+    @apply w-full  border-y-[3px] shadow-lg border-[#262626] p-1 rounded-xl bg-dark-2 px-4 py-5 sm:w-96 ;
+  }
+
+  .community-card_btn{
+    @apply rounded-lg bg-blue-500 px-5 py-1.5   !important;
   }
 
 @layer utilities {
@@ -94,7 +102,7 @@
   @apply flex min-h-[50px] flex-1 items-center gap-3 bg-dark-2 text-gray-800 data-[state=active]:bg-[#0e0e12] data-[state=active]:text-gray-800 !important;
 }
 .user-card {
-  @apply flex flex-col justify-between gap-4 ;
+  @apply flex flex-col justify-between gap-4 border-y-[3px] shadow-lg border-[#262626] p-1 rounded-xl ;
 }
 
 .user-card_avatar {
@@ -111,4 +119,11 @@
 
 .searchbar_input {
   @apply border-none bg-dark-2 text-lg text-gray-600 outline-none !important;
+}
+
+::placeholder{
+  color: white;
+}
+select::placeholder{
+  color: white;
 }

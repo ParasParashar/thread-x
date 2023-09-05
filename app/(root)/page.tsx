@@ -7,13 +7,12 @@ export default async function Home() {
   const user =await currentUser();
   return (
     <>
-      <h1 className="head-text">Home</h1>
       <section className="mt-9 felx flex-col gap-10">
         {result.posts.length === 0 ? (
           <p className="text-lg text-center font-mono">No threads</p>
         ):(
           <>
-          {result.posts.map((post)=>(
+          {result.posts.map((post:any)=>(
             <ThreadCard
             key={post._id}
             id={post.id}
@@ -24,6 +23,8 @@ export default async function Home() {
             community={post.community}
             createdAt={post.createdAt}
             comments={post.children}
+            image={post.image}
+            likes={post.likes}
             />
           ))}
           </>

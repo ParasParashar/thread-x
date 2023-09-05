@@ -3,22 +3,36 @@ import { revalidatePath } from "next/cache";
 import Thread from "../models/thread.model";
 import User from "../models/user.model";
 import { connectToDB } from "../mongoose";
+import Community from "../models/community.model";
+import { promise } from "zod";
 
 interface params {
     text: string;
     author: string;
-    communityId: string | null;
+    communityId: string | null | Array<string>;
     path: string;
+    image?: string;
 
 }
-export async function createthread({ text, communityId, author, path }: params) {
+export async function createthread({ text, communityId, author, path ,image }: params) {
     try {
         connectToDB();
+        const communityIdObject = await Community.findOne(
+            { _id: communityId },
+            { _id: 1 }
+        );
         const createThread = await Thread.create({
             text,
             author,
-            community: null,
+            community: communityIdObject,
+            image
         });
+
+        if (communityIdObject) {
+            await Community.findByIdAndUpdate(communityIdObject, {
+                $push: { threads: createThread._id },
+            });
+        };
         await User.findByIdAndUpdate(
             author, {
             $push: {
@@ -26,7 +40,7 @@ export async function createthread({ text, communityId, author, path }: params) 
             }
         }
         );
-        revalidatePath(path);
+        revalidatePath('/');
     } catch (error: any) {
         throw new Error(error);
     }
@@ -52,7 +66,9 @@ export async function fetchPosts(pageNumber = 1, pageSize = 20) {
                 model: User,
                 select: '_id ,name,parentId,image'
             }
-        });
+        })
+        .populate({ path: 'community', model: 'Community' })
+        ;
     //  This is how pagination work
     const totolPostCount = await Thread.countDocuments(
         {
@@ -67,6 +83,11 @@ export async function fetchThreadById(id: string) {
     try {
         connectToDB();
         const thread = await Thread.findById(id)
+            .populate({
+                path: 'community',
+                model: Community,
+                select: '_id id name image'
+            })
             .populate({
                 path: 'author',
                 model: User,
@@ -123,4 +144,39 @@ export async function addCommentToThread(
     }
 
 
+}
+export async function deleteThread(currentUserId: string, threadId: string) {
+    try {
+        connectToDB();
+        const user = await User.findOne({ _id: currentUserId });
+        if (!user) {
+            throw new Error("User not Found")
+        }
+        const threadFind = await Thread.findOne({
+            _id: threadId,
+            author: user._id
+        });
+        if (!threadFind) {
+            throw new Error("Thread not Found")
+        }
+        await Thread.deleteOne(threadFind._id);
+        await User.updateOne({ _id: user._id },
+            { $pull: { threads: threadFind._id } }
+        );
+        if (threadFind.community) {
+            const communityFind = await Community.findOne({ _id: threadFind.community });
+            if (!communityFind) {
+                throw new Error("Community Not Found")
+            }
+            await Community.updateOne(
+                { _id: communityFind._id },
+                { $pull: { threads: threadFind._id } }
+            );
+        }
+        revalidatePath('/profile');
+        return { success: true };
+    } catch (error: any) {
+        throw new Error(error);
+
+    }
 }

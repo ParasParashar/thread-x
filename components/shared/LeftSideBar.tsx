@@ -15,7 +15,6 @@ const LeftSideBar = () => {
           const isActive =
             (pathName.includes(item.route) && item.route.length > 1) ||
             pathName === item.route;
-            if(item.route === '/profile') item.route=`${item.route}/${userId}`
           return (
             <Link
               key={item.route}

@@ -1,15 +1,37 @@
 import { fetchUserPosts } from "@/lib/actions/user.actions";
 import { redirect } from "next/navigation";
 import ThreadCard from "../cards/ThreadCard";
+import { fetchCommunityPosts } from "@/lib/actions/community.action";
+import Link from "next/link";
 
 interface props {
   currentUserId: string;
   accountId: string;
   accountType: string;
 }
+
 const ThreadsTab = async ({ currentUserId, accountId, accountType }: props) => {
-  let result = await fetchUserPosts(accountId);
-  if (!result) redirect("/");
+  let result: any;
+
+  if (accountType === "Community") {
+    result = await fetchCommunityPosts(accountId);
+  } else {
+    result = await fetchUserPosts(accountId);
+  }
+
+  if (!result) {
+     redirect("/");
+    return null; 
+  }
+
+  if (!result || result.threads.length === 0) {
+    return (
+      <section className="flex justify-center flex-col gap-3 h-28 mt-10  items-center">
+        <h1 className="head-text text-gray-600">No Threads</h1>
+        <Link href={'/create-thread'} className="bg-blue-500 hover:bg-blue-700 p-2  rounded-lg shadow-lg">Create Some</Link>
+      </section>
+    );
+  }
 
   return (
     <section>
@@ -36,6 +58,8 @@ const ThreadsTab = async ({ currentUserId, accountId, accountType }: props) => {
           }
           createdAt={thread.createdAt}
           comments={thread.children}
+          image={thread.image}
+          likes={thread.likes}
         />
       ))}
     </section>

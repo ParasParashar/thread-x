@@ -22,7 +22,6 @@ const layout = ({ children }: { children: React.ReactNode }) => {
             <section className="main-container">
               <div className="w-full max-w-4xl">{children}</div>
             </section>
-            <RightSideBar />
           </main>
           <BottomBar />
         </body>

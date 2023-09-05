@@ -4,7 +4,8 @@ import { revalidatePath } from "next/cache";
 import User from "../models/user.model";
 import { connectToDB } from "../mongoose"
 import Thread from "../models/thread.model";
-import { FilterQuery, SortOrder } from "mongoose";
+import mongoose, { FilterQuery, SortOrder } from "mongoose";
+import Community from "../models/community.model";
 interface props {
     userId: string;
     userName: string;
@@ -42,33 +43,41 @@ export async function updateUser({
     }
 }
 export async function fetchUser(userId: string) {
-    connectToDB();
     try {
-        return await User
-            .findOne({ id: userId })
-        // .populate({path:'communities',model:Community})
+        connectToDB();
+        return await User.findOne({ id: userId })
+            .populate({ path: 'communities', model: Community });
     } catch (error: any) {
         throw new Error(error);
     };
-}
+};
+
 export async function fetchUserPosts(userId: string) {
     try {
         connectToDB();
-        const threads = await User.findOne({ id: userId })
+        const threadsWithCommunity = await User.findOne({ id: userId })
             .populate({
                 path: 'threads',
                 model: Thread,
-                populate: {
-                    path: 'children',
-                    model: Thread,
-                    populate: {
-                        path: 'author',
-                        model: User,
-                        select: 'name image id'
+                populate: [
+                    {
+                        path: 'children',
+                        model: Thread,
+                        populate: {
+                            path: 'author',
+                            model: User,
+                            select: 'name _id image id'
+                        }
+                    },
+                    {
+                        path: 'community',
+                        model: Community,
+                        select: 'name id _id image'
                     }
-                }
-            })
-        return threads;
+                ]
+            });
+
+        return threadsWithCommunity;
     } catch (error: any) {
         throw new Error(error)
     }
@@ -85,7 +94,7 @@ export async function fetchUsers({
     pageNumber?: number;
     pageSize?: number;
     sortBy?: SortOrder;
-}){
+}) {
     try {
         connectToDB();
         const skipAmount = (pageNumber - 1) * pageSize;
@@ -117,25 +126,63 @@ export async function fetchUsers({
         throw new Error(error)
     }
 };
-export async function getActivity(userId:string) {
+export async function getActivity(userId: string) {
     try {
         connectToDB();
-        const userThread = await Thread.find({author:userId});
-        const childThreadsId = userThread.reduce((acc,userThread)=>{
-            return  acc.concat(userThread.children)
-            },[]);
-       const replies  =  await Thread.find({
-        _id:{$in:childThreadsId},
-        author:{$ne:userId}
-       })
-       .populate({
-        path:'author',
-        model:User,
-        select:'name image _id'
-       });
-       return replies;
-    } catch (error:any) {
+        const userThread = await Thread.find({ author: userId });
+        const childThreadsId = userThread.reduce((acc, userThread) => {
+            return acc.concat(userThread.children)
+        }, []);
+        const replies = await Thread.find({
+            _id: { $in: childThreadsId },
+            author: { $ne: userId }
+        })
+            .populate({
+                path: 'author',
+                model: User,
+                select: 'name image _id'
+            });
+        return replies;
+    } catch (error: any) {
         throw new Error(error)
     }
-    
+
+}
+export async function getUserReplies(userId: string) {
+    try {
+        connectToDB();
+        const replies = await Thread.find({
+            author: userId,
+            parentId: { $exists: true }
+        }).populate({ path: 'author', model: User });
+        return replies;
+    } catch (error: any) {
+        throw new Error(error);
+    }
+}
+export async function filterUserFavorite(currentUserId: string, threadId: string) {
+    try {
+        connectToDB();
+        const user = await User.findOne({ id: currentUserId });
+        if (!user) throw new Error('User Not Found');
+        const thread = await Thread.findOne({ _id: threadId });
+        if (!thread) throw new Error('Thread Not Found');
+        const filter = await user.favorite.includes(threadId);
+        return filter;
+    } catch (error: any) {
+        throw new Error('Error: ' + error.message);
+    }
+}
+export async function filterUserRepost(currentUserId: string, threadId: string) {
+    try {
+        connectToDB();
+        const user = await User.findOne({ id: currentUserId });
+        if (!user) throw new Error('User Not Found');
+        const thread = await Thread.findOne({ _id: threadId });
+        if (!thread) throw new Error('Thread Not Found');
+        const filter = await user.reposts.includes(threadId);
+        return filter;
+    } catch (error: any) {
+        throw new Error('Error: ' + error.message);
+    }
 }
