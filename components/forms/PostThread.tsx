@@ -178,7 +178,7 @@ const PostThread = ({ userId, userCommunityId }: Props) => {
             name="thread"
             required
             rows={6}
-            className="account-form-input no-focus"
+            className="account-form-input no-focus p-2"
             value={formData.thread}
             onChange={(e:any)=>handleInputChange(e)}
           />
@@ -206,14 +206,17 @@ const PostThread = ({ userId, userCommunityId }: Props) => {
               </>
             ) : (
               userCommunityId.map((community: any) => (
+                <>
                 <option
                   key={community._id}
                   value={community._id}
                   className="bg-dark-2 text-white p-3"
                   style={{ cursor: "pointer" }}
-                >
+                  >
                   {community.name}
                 </option>
+              <option className="p-3" value="">Personal Thread</option>
+                  </>
               ))
             )}
           </select>
