@@ -7,8 +7,9 @@ import { redirect } from "next/navigation";
 const page = async () => {
   const user = await currentUser();
   if(!user) return null;
+  console.log(user.id);
   const userInfo = await fetchUser(user.id);
-  if(!userInfo.onboarded) redirect ('/onboarding'); 
+  // if(!userInfo.onboarded) redirect ('/onboarding'); 
   const userData = {
     id: user?.id,
     objectId: userInfo?._id,
