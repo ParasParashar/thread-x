@@ -17,7 +17,7 @@
 }
 /* main classes */
 .activity-card {
-  @apply flex items-center gap-2 rounded-md bg-dark-2 px-7 py-4;
+  @apply flex items-center gap-2 rounded-md bg-dark-2 px-7 py-4 border-[#262626] border-y-[3px] ;
 }
 .head-text{
   @apply text-2xl font-bold

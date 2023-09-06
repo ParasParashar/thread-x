@@ -1,4 +1,4 @@
-import { filterUserFavorite, userDeleteFavoritesThread, userFavoritesThread } from "@/lib/actions/user.actions";
+import { filterUserFavorite} from "@/lib/actions/user.actions";
 import axios from "axios";
 import { redirect, useRouter } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";
@@ -14,10 +14,10 @@ const useFavorite = ({ currentUserId, id }: props) => {
     const [hasFavorited, setHasFavorited] = useState(false);
 
     useEffect(() => {
-        async function checkFavorite() {
+        async function checkFavorite () {
             try {
                 if (!currentUserId) {
-                    redirect("/sign-in");
+                router.push('/sign-in')
                     return;
                 }
                 setHasFavorited(false);
@@ -35,7 +35,7 @@ const useFavorite = ({ currentUserId, id }: props) => {
         e.stopPropagation();
         try {
             if (!currentUserId) {
-                redirect("/sign-in");
+                router.push('/sign-in')
                 return;
             }
 

@@ -25,20 +25,30 @@ const Favorite = ({ currentUserId, id }: props) => {
       onClick={handleButtonClick}
       className="hover:bg-[#1e1e1e] relative rounded-full cursor-pointer p-1"
     >
-      <AiOutlineHeart size={24} className="fill-[#56567b]" />
-      <AiFillHeart
+      {hasFavorited ? (
+        <AiFillHeart
         onClick={(e: any) => handleButtonClick(e)}
-        size={20}
+        size={24}
         className={`
-        absolute top-[6.1px] right-[5.6px]
-        ${hasFavorited ? "text-rose-500" : "text-[#090909]"}
+        text-rose-500
         ${
           isScaling
-            ? "transform scale-150 transition-transform duration-200"
+            ? "transform scale-[2] transition-transform duration-200"
             : ""
         }
         `}
-      />
+      /> 
+      ):(
+      <AiOutlineHeart size={24}  className={`
+      text-[#56567b]
+      ${
+        isScaling
+          ? "transform scale-150 transition-transform duration-200"
+          : ""
+      }
+      `} />
+
+      )}
     </div>
   );
 };
