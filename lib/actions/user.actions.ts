@@ -186,3 +186,110 @@ export async function filterUserRepost(currentUserId: string, threadId: string) 
         throw new Error('Error: ' + error.message);
     }
 }
+export async function filterUserFollow(currentUserId: string, followUserId: string) {
+    try {
+        connectToDB();
+        const followUser = await User.findOne({ id: followUserId });
+        if (!followUser) throw new Error('Follow User Not Found');
+        const currentUser = await User.findOne({ id: currentUserId });
+        if (!currentUser) throw new Error('User Not Found');
+        const filter = await currentUser.following.includes(followUser._id);
+        return filter;
+    } catch (error: any) {
+        throw new Error('Error: ' + error.message);
+    }
+};
+
+export async function filterUserFollowing(currentUserId: string) {
+    try {
+        connectToDB();
+        const user = await User.findOne({ _id: currentUserId });
+        if (!user) throw new Error('User Not Found');
+        const followingIds = user.following;
+        const currentUserFollowing = await User.find({ _id: { $in: followingIds } })
+            .select('id _id image name');
+        return currentUserFollowing;
+    } catch (error: any) {
+        throw new Error('Error: ' + error.message);
+    }
+};
+
+export async function filterUserFollowers(currentUserId: string) {
+    try {
+        connectToDB();
+        const user = await User.findOne({ _id: currentUserId });
+        if (!user) throw new Error('User Not Found');
+        const followersIds = user.followers;
+        const currentUserFollowers = await User.find({
+            _id: {
+                $in:
+                    followersIds
+            }
+        });
+        return currentUserFollowers;
+    } catch (error: any) {
+        throw new Error('Error: ' + error.message);
+    }
+};
+export async function getRequests(currentUserId: string) {
+    try {
+        connectToDB();
+        const user = await User.findOne({ _id: currentUserId })
+            .populate({
+                path: 'followRequests',
+                model: User,
+                select: 'id _id image name'
+            });
+        if (!user) throw new Error("user not Found");
+        return user;
+    } catch (error: any) {
+        throw new Error('Error: ' + error.message);
+    }
+
+}
+export async function acceptsFriendRequests(currentUserId: string, acceptedId: string) {
+    try {
+        connectToDB();
+        const user = await User.findOne({ _id: currentUserId });
+        const AcceptedUser = await User.findOne({ _id: acceptedId });
+        if (!user) throw new Error("user not Found");
+        console.log(AcceptedUser._id, 'accepts');
+        if (user.followRequests.includes(AcceptedUser._id)) {
+            await User.updateOne(
+                { _id: user._id },
+                {
+                    $pull: { followRequests: AcceptedUser._id }
+                }
+            );
+        };
+        if (!AcceptedUser.following.includes(user._id)) {
+            AcceptedUser.following.push(user._id);
+            AcceptedUser.save();
+        };
+        if (!user.followers.includes(AcceptedUser._id)) {
+            user.followers.push(AcceptedUser._id);
+            user.save();
+        };
+        revalidatePath('/activity');
+        return user;
+    } catch (error: any) {
+        throw new Error('Error: ' + error.message);
+    }
+
+};
+export async function unfollowUser(currentUserId: string, followUserId: string) {
+    try {
+        connectToDB();
+        console.log(currentUserId,followUserId,'werlid')
+        const user = await User.findOne({ id: currentUserId });
+        const followUser = await User.findOne({ id: followUserId });
+        if (!user) throw new Error("user not Found");
+        if (!followUser) throw new Error("FollowUser not Found");
+        await user.updateOne({ $pull: { following: followUser._id } });
+        await followUser.updateOne({ $pull: { followers: user._id } });
+        return user;
+    } catch (error: any) {
+        throw new Error('Error: ' + error.message);
+    }
+
+};

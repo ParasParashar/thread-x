@@ -43,7 +43,7 @@ const TopBar = () => {
               <DropdownMenu>
                 <DropdownMenuTrigger>
                   <BiMenuAltRight size={40} 
-                          className="hover:text-gray-600 text-[#262626] "
+                          className="hover:text-[#262626] text-gray-600"
                   
                   />
                 </DropdownMenuTrigger>
@@ -71,10 +71,10 @@ const TopBar = () => {
                         <SignOutButton
                           signOutCallback={() => router.push("/sign-in")}
                         >
-                          <div className="flex cursor-pointer gap-3">
+                          <div className="flex cursor-pointer gap-3 ">
                             <PiSignOutBold
                               size={24}
-                              className="hover:text-gray-600 text-[#262626] "
+                              className="hover:text-[#262626] text-gray-600 "
                             />
                             <span className="text-lg font-light hover:font-bold transition font-mono ">
                               Logout

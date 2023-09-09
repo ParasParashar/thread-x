@@ -4,9 +4,11 @@ import ThreadCard from "@/components/cards/ThreadCard";
 import {
   fetchUser,
   fetchUserPosts,
+  filterUserFollowers,
   getUserReplies,
 } from "@/lib/actions/user.actions";
 import ProfileHeader from "@/components/shared/ProfileHeader";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { profileTabs } from "@/constants";
 import Image from "next/image";
@@ -15,7 +17,8 @@ import { FiExternalLink } from "react-icons/fi";
 import LeaveButton from "@/components/shared/LeaveButton";
 import { userCommunity } from "@/lib/actions/community.action";
 import CommunityCard from "@/components/cards/CommunityCard";
-import {BiEditAlt} from 'react-icons/bi'
+import { BiEditAlt } from "react-icons/bi";
+import FollowersModel from "@/components/shared/FollowersModel";
 async function Page() {
   const user = await currentUser();
   if (!user) return null;
@@ -24,22 +27,49 @@ async function Page() {
   const userReplies = await getUserReplies(userInfo._id);
   const totalParentThreads = await fetchUserPosts(userInfo.id);
   const userCommunityFind = await userCommunity(userInfo._id);
+  const followers = await filterUserFollowers(userInfo._id);
   return (
     <section>
       <div className="flex justify-between items-center">
-      <ProfileHeader
-        accountId={userInfo.id}
-        authUserId={user.id}
-        name={userInfo.name}
-        username={userInfo.userName}
-        imgUrl={userInfo.image}
-        bio={userInfo.bio}
-        />
-      <Link href={'/onboarding'} className="flex items-center text-gray-600 hover:text-[#262626]">
-        <BiEditAlt size={30}/>
-        Edit
-        </Link>
+        <div>
+          <ProfileHeader
+            accountId={userInfo.id}
+            authUserId={user.id}
+            name={userInfo.name}
+            username={userInfo.userName}
+            imgUrl={userInfo.image}
+            bio={userInfo.bio}
+          />
+          <Dialog>
+            <DialogTrigger asChild>
+              <p className="ml-1 rounded-sm text-gray-500 font-semibold hover:text-gray-600 px-2 py-1 cursor-pointer flex gap-4">
+                {followers.map((user,index)=>(
+               <Image
+               key={user.id}
+               width="20"
+               height="20"
+               src={user.image}
+               alt="Followers User Profile"
+               className={`${
+                index !== 0 && "-ml-2"
+              } rounded-full object-cover`}
+             />
+                ))}
+                <span className="text-gray-400 font-light ">{followers.length}</span>
+                Followers
+              </p>
+            </DialogTrigger>
+            <FollowersModel userId={userInfo._id} id={userInfo.id}  />
+          </Dialog>
         </div>
+        <Link
+          href={"/onboarding"}
+          className="flex items-center text-gray-600 hover:text-[#262626]"
+        >
+          <BiEditAlt size={30} />
+          Edit
+        </Link>
+      </div>
       <div className="mt-9">
         <Tabs defaultValue="threads" className="w-full">
           <TabsList className="tab">
@@ -140,146 +170,83 @@ async function Page() {
               )}
               {tab.value === "community" && (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  {userCommunityFind?.length > 0 && (
-                    <>
-                      <h1 className="head-text text-center text-gray-600">
-                        Communities Created by {userInfo.name}
-                      </h1>
-                      <section className="mt-5 flex flex-wrap gap-4">
-                        {userCommunityFind.map((community: any) => (
-                          <div key={community.id} className="grid grid-cols-2 gap-4">
-                            <div>
-                              <CommunityCard
-                                id={community.id}
-                                name={community.name}
-                                username={community.username}
-                                imgUrl={community.image}
-                                bio={community.bio}
-                                members={community.members}
-                                deleteShow
-                              />
+                  <div>
+                    {userCommunityFind?.length > 0 && (
+                      <>
+                        <h1 className="head-text text-center text-gray-600">
+                          Communities Created by {userInfo.name}
+                        </h1>
+                        <section className="mt-5 flex flex-wrap gap-4">
+                          {userCommunityFind.map((community: any) => (
+                            <div
+                              key={community.id}
+                              className="grid grid-cols-2 gap-4"
+                            >
+                              <div>
+                                <CommunityCard
+                                  id={community.id}
+                                  name={community.name}
+                                  username={community.username}
+                                  imgUrl={community.image}
+                                  bio={community.bio}
+                                  members={community.members}
+                                  deleteShow
+                                />
+                              </div>
                             </div>
-                          </div>
-                        ))}
-                      </section>
-                    </>
+                          ))}
+                        </section>
+                      </>
+                    )}
+                  </div>
+
+                  {userInfo.communities.length === 0 ? (
+                    <section className="flex justify-center flex-col gap-3 h-28 mt-10 items-center">
+                      <h1 className="head-text text-center text-gray-600">
+                        Currently, you are not a member of any Community
+                      </h1>
+                      <Link
+                        href={"/communities"}
+                        className="bg-blue-500 hover:bg-blue-700 p-2 rounded-lg shadow-lg"
+                      >
+                        Join any
+                      </Link>
+                    </section>
+                  ) : (
+                    <div>
+                      <h1 className="head-text text-gray-600 text-center">
+                        Communities join by {userInfo.name}
+                      </h1>
+                      {userInfo.communities.map((activity: any) => (
+                        <Link
+                          key={activity.id}
+                          href={`/communities/${activity._id}`}
+                        >
+                          <article className="activity-card justify-between mt-5">
+                            <div className="flex gap-3">
+                              <Image
+                                src={activity.image}
+                                alt="Profile Photo"
+                                width={30}
+                                height={30}
+                                className="rounded-full object-contain"
+                              />
+                              <p className="text-lg">
+                                <span className="text-blue-500">
+                                  {activity.name}
+                                </span>
+                              </p>
+                            </div>
+                            <LeaveButton
+                              id={activity._id}
+                              members={userInfo._id}
+                            />
+                          </article>
+                        </Link>
+                      ))}
+                    </div>
                   )}
                 </div>
-              
-                {userInfo.communities.length === 0 ? (
-                  <section className="flex justify-center flex-col gap-3 h-28 mt-10 items-center">
-                    <h1 className="head-text text-center text-gray-600">
-                      Currently, you are not a member of any Community
-                    </h1>
-                    <Link
-                      href={"/communities"}
-                      className="bg-blue-500 hover:bg-blue-700 p-2 rounded-lg shadow-lg"
-                    >
-                      Join any
-                    </Link>
-                  </section>
-                ) : (
-                  <div>
-                    <h1 className="head-text text-gray-600 text-center">
-                      Communities join by {userInfo.name} 
-                    </h1>
-                    {userInfo.communities.map((activity: any) => (
-                      <Link key={activity.id} href={`/communities/${activity._id}`}>
-                        <article className="activity-card justify-between mt-5">
-                          <div className="flex gap-3">
-                            <Image
-                              src={activity.image}
-                              alt="Profile Photo"
-                              width={30}
-                              height={30}
-                              className="rounded-full object-contain"
-                            />
-                            <p className="text-lg">
-                              <span className="text-blue-500">{activity.name}</span>
-                            </p>
-                          </div>
-                          <LeaveButton id={activity._id} members={userInfo._id} />
-                        </article>
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </div>
-              
-              
-                // <div className="grid grid-cols-2 md:grid-cols-1">
-                //   <div>
-                //     {userCommunityFind?.length > 0 && (
-                //       <>
-                //       <h1 className="head-text text-center text-gray-600">
-                //       Community Created by {userInfo.name}
-                //     </h1>
-                //       <section className="mt-9 flex flex-wrap gap-4">
-                //         {userCommunityFind.map((community: any) => (
-                //           <div key={community.id}>
-                //             <CommunityCard
-                //               id={community.id}
-                //               name={community.name}
-                //               username={community.username}
-                //               imgUrl={community.image}
-                //               bio={community.bio}
-                //               members={community.members}
-                //               deleteShow
-                //               />
-                //           </div>
-                //         ))}
-                //       </section>
-                //         </>
-                //     )}
-                //   </div>
-                //   {userInfo.communities.length === 0 ? (
-                //     <section className="flex justify-center flex-col gap-3 h-28 mt-10  items-center">
-                //       <h1 className="head-text text-center text-gray-600">
-                //         Currently!! you are not a member of any Community
-                //       </h1>
-                //       <Link
-                //         href={"/communities"}
-                //         className="bg-blue-500 hover:bg-blue-700 p-2  rounded-lg shadow-lg"
-                //       >
-                //         Join any
-                //       </Link>
-                //     </section>
-                //   ) : (
-                //     <>
-                //       <h1 className="head-text mt-5 text-gray-600 text-center">
-                //         Community in which {userInfo.name} is member
-                //       </h1>
-                //       {userInfo.communities.map((activity: any) => (
-                //         <Link
-                //           key={activity.id}
-                //           href={`/communities/${activity._id}`}
-                //         >
-                //           <article className="activity-card justify-between mt-2">
-                //             <div className="flex gap-3">
-                //               <Image
-                //                 src={activity.image}
-                //                 alt="Profile Photo"
-                //                 width={30}
-                //                 height={30}
-                //                 className="rounded-full object-contain"
-                //               />
-                //               <p className="text-lg">
-                //                 <span className="text-blue-500">
-                //                   {activity.name}
-                //                 </span>
-                //               </p>
-                //             </div>
-                //             <LeaveButton
-                //               id={activity._id}
-                //               members={userInfo._id}
-                //             />
-                //           </article>
-                //         </Link>
-                //       ))}
-                //     </>
-                //   )}
-                // </div>
               )}
             </TabsContent>
           ))}

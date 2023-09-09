@@ -28,7 +28,6 @@ const ThreadsTab = async ({ currentUserId, accountId, accountType }: props) => {
     return (
       <section className="flex justify-center flex-col gap-3 h-28 mt-10  items-center">
         <h1 className="head-text text-gray-600">No Threads</h1>
-        <Link href={'/create-thread'} className="bg-blue-500 hover:bg-blue-700 p-2  rounded-lg shadow-lg">Create Some</Link>
       </section>
     );
   }

@@ -25,6 +25,26 @@ const userSchema = new mongoose.Schema({
             ref:'Thread',
         }
     ],
+    followRequests:[
+        {
+            type:mongoose.Schema.Types.ObjectId,
+            ref:'User'
+        }
+    ],
+    followers:[
+        {
+            type:mongoose.Schema.Types.ObjectId,
+            ref:'User',
+            unique:true,
+        }
+    ],
+    following:[
+        {
+            type:mongoose.Schema.Types.ObjectId,
+            ref:'User',
+            unique:true,
+        }
+    ],
     reposts:[
         {
             type:mongoose.Schema.Types.ObjectId,

@@ -125,20 +125,23 @@ const ThreadCard = ({
                 <div className="flex items-center gap-3">
                   {comments.length > 0 && (
                     <>
-                      {comments.map((comment: any, index: number) =>(
+                      {comments.map((comment: any, index: number) => (
                         <div key={`comment-${index}`}>
                           <Image
-                            src={comment.author.image || './assets/members.svg'} 
-                            width={20}
-                            height={20}
-                            className="rounded-full object-cover"
-                            alt="Reply People Profile"
+                            src={comment.author.image || "./assets/members.svg"}
+                            alt="Comment Profile Image"
+                            width={28}
+                            height={28}
+                            className={`${
+                              index !== 0 && "-ml-2"
+                            } rounded-full object-contain`}
                           />
                         </div>
                       ))}
                       <Link href={`/thread/${id}`}>
-                        <p className="mt-1 text-[15px] text-gray-400 hover:text-neutral-200  ">
-                          {comments.length} replies
+                        <p className="mt-1 text-[15px] text-gray-400 hover:text-neutral-200 span-x-2 ">
+                          {comments?.length}&nbsp;
+                          {comments?.length > 1 ? <>replies</> : <>reply</>}
                         </p>
                       </Link>
                     </>

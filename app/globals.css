@@ -3,14 +3,20 @@
 @tailwind utilities;
 
 .bg-dark-1 {
-  /* @apply bg-black text-white; */
-  @apply bg-[#090909] text-white;
+  /* @apply bg-[#090909] text-white; */
+  @apply bg-[#101010] text-white;
 }
 .bg-dark-2 {
   /* background-color: #0a0112; */
   /* background-color: #130223;/ */
-  background-color: #090909; 
-
+  /* background-color: #090909;  */
+  background-color: #101010;
+}
+.follow-button{
+  @apply transition text-white hover:bg-[#262626] bg-blue-500 rounded-md p-2 ;
+}
+.unfollow-button{
+ @apply p-2 rounded-md bg-[#313131] hover:bg-[#2a2323] 
 }
 .dark{
   @apply bg-slate-900
@@ -99,7 +105,8 @@
   @apply border border-slate-900 bg-dark-1 outline-none  !important;
 }
 .tab {
-  @apply flex min-h-[50px] flex-1 items-center gap-3 bg-dark-2 text-gray-800 data-[state=active]:bg-[#0e0e12] data-[state=active]:text-gray-800 !important;
+  @apply flex min-h-[50px] flex-1 items-center gap-3 bg-dark-2 text-white
+   data-[state=active]:border-b-[#707274] border-b-[3px] border-b-[#262626]  data-[state=active]:text-gray-400 !important;
 }
 .user-card {
   @apply flex flex-col justify-between gap-4 border-y-[3px] shadow-lg border-[#262626] p-1 rounded-xl ;
