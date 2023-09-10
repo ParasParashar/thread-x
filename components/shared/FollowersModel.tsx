@@ -39,7 +39,7 @@ const FollowersModel = ({ userId ,id }: ModelProps) => {
     }
   }, [userId]);
   return (
-    <DialogContent className="bg-[#1d1c1c] max-sm:h-screen max-sm:w-full">
+    <DialogContent className="bg-[#1d1c1c] max-sm:h-full max-sm:w-full">
       <DialogHeader>
         <div className="mt-9">
           <Tabs defaultValue="threads" className="w-full">

@@ -222,8 +222,7 @@ export async function filterUserFollowers(currentUserId: string) {
         const followersIds = user.followers;
         const currentUserFollowers = await User.find({
             _id: {
-                $in:
-                    followersIds
+                $in: followersIds
             }
         });
         return currentUserFollowers;

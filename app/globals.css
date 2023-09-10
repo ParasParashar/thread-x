@@ -16,7 +16,7 @@
   @apply transition text-white hover:bg-[#262626] bg-blue-500 rounded-md p-2 ;
 }
 .unfollow-button{
- @apply p-2 rounded-md bg-[#313131] hover:bg-[#2a2323] 
+ @apply p-2 rounded-md bg-[#313131] hover:bg-[#2a2323] flex items-center 
 }
 .dark{
   @apply bg-slate-900
@@ -40,7 +40,7 @@
 }
 
 .leftsidebar_link {
-  @apply relative flex justify-start gap-4 rounded-lg p-4;
+  @apply relative flex justify-start gap-4 rounded-lg hover:bg-[#3f3e3ea7] p-4;
 }
 .bottombar{
   @apply fixed bottom-0 z-10 w-full rounded-t-3xl  p-4 backdrop-blur-lg  md:hidden;
@@ -51,7 +51,7 @@
 }
 
 .bottombar_link{
-  @apply relative flex flex-col items-center gap-2 rounded-lg p-2 sm:flex-1 sm:px-2 sm:py-2.5;
+  @apply relative flex flex-col items-center gap-2 rounded-lg p-2 sm:flex-1 sm:px-2 sm:py-2.5 hover:bg-[#3f3e3ea7];
 }
   .pagination {
     @apply mt-10 flex w-full items-center justify-center gap-5;
@@ -69,6 +69,17 @@
   }
 
 @layer utilities {
+  .scrollbar-custom-class::-webkit-scrollbar{
+    width: 1px;
+    height: 1px;
+    border-radius: 25%;
+  }
+  .scrollbar-custom-class::-webkit-scrollbar-thumb{
+    background-color: #262626;
+  }
+  .scrollbar-custom-class::-webkit-scrollbar-track{
+    background-color: transparent;
+  }
   .css-invert {
     @apply invert-[50%] brightness-200;
   }

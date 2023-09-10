@@ -1,5 +1,5 @@
 import {Server as NextServer ,Socket} from 'net';
-import { NextApiResponse, NextPage } from 'next';
+import { NextApiResponse } from 'next';
 import {Server as SocketIOServer} from 'socket.io'
 export type NextApiResponseServerIo=NextApiResponse &{
     socket:Socket&{

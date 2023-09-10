@@ -8,7 +8,7 @@ interface props{
 }
 const ChatHeader = ({image,name,paramId}:props) => {
   return (
-    <nav className="bg-[#252626] p-1">
+    <nav className="bg-[#272727] p-1">
         <div className="flex items-center gap-2">
           <div className="relative h-14 w-14 object-cover">
             <Link href={`/profile/${paramId}`}>

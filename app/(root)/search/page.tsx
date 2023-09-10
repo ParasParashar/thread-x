@@ -19,7 +19,7 @@ export default async function Page() {
       <h1 className="head-text">Search</h1>
       <div className="mt-14 flex flex-col gap-9">
         {result.users.length === 0?(
-            <p className="text-xl text-center">No User Found</p>
+            <p className="text-xl text-center">No User's Found</p>
         ):(
            <>
            {result.users.map((person)=>(

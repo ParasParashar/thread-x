@@ -1,6 +1,5 @@
 import { currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
-import ThreadCard from "@/components/cards/ThreadCard";
 import {
   fetchUser,
   fetchUserPosts,
@@ -8,15 +7,17 @@ import {
   filterUserFollowing,
   getUserReplies,
 } from "@/lib/actions/user.actions";
-import ProfileHeader from "@/components/shared/ProfileHeader";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { profileTabs } from "@/constants";
 import Image from "next/image";
 import Link from "next/link";
 import { FiExternalLink } from "react-icons/fi";
+import {TbMessage2} from 'react-icons/tb'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ThreadsTab from "@/components/shared/ThreadsTab";
 import CommunityCard from "@/components/cards/CommunityCard";
 import { userCommunity } from "@/lib/actions/community.action";
+import ProfileHeader from "@/components/shared/ProfileHeader";
+import ThreadCard from "@/components/cards/ThreadCard";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import FollowersModel from "@/components/shared/FollowersModel";
 import FollowAndUnfollow from "@/components/shared/FollowAndUnfollow";
@@ -75,7 +76,10 @@ async function Page({ params }: { params: { id: string } }) {
         {user.id !== userInfo.id && (
           <>
           <FollowAndUnfollow currentUserId={user.id} followUserId={params.id} />
-          <Link href={`/messages/${params.id}`} className="unfollow-button">Message</Link>
+          <Link href={`/messages/${params.id}`} className="unfollow-button">
+            <TbMessage2 className='mr-1'/>
+            Message
+            </Link>
           </>
           )}
           </div>

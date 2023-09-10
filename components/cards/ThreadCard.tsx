@@ -126,15 +126,19 @@ const ThreadCard = ({
                   {comments.length > 0 && (
                     <>
                       {comments.map((comment: any, index: number) => (
-                        <div key={`comment-${index}`}>
+                        <div
+                          key={index}
+                          className={`relative h-5 w-5 object-cover ${
+                            index !== 0 && "-ml-2"
+                          }`}
+                        >
                           <Image
                             src={comment.author.image || "./assets/members.svg"}
                             alt="Comment Profile Image"
-                            width={28}
-                            height={28}
-                            className={`${
-                              index !== 0 && "-ml-2"
-                            } rounded-full object-contain`}
+                            fill
+                            className={`rounded-full object-cover ${
+                              index !== 0 && "absolute"
+                            } `}
                           />
                         </div>
                       ))}
