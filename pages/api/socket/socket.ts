@@ -25,7 +25,7 @@ const ioHandler = (req: NextApiRequest, res: NextApiResponseServerIo) => {
       console.log("A user connected");
 
       socket.on("send-message", async (obj: any) => {
-        console.log("Received a Message data:", obj)
+        // console.log("Received a Message data:", obj)
         //storing data to db
         await Message.create({
           senderId: obj.currentUserId,

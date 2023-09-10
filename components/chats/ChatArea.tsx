@@ -34,7 +34,11 @@ const ChatArea = ({ userId, currentUserId }: Message) => {
         setLoading(false);
       });
 
-    socketInstance = io(process.env.NEXT_PUBLIC_SITE_URL!, {
+    // socketInstance = io(process.env.NEXT_PUBLIC_SITE_URL!, {
+    //   path: "/api/socket/socket",
+    //   addTrailingSlash: false,
+    // });
+    socketInstance = io({
       path: "/api/socket/socket",
       addTrailingSlash: false,
     });
