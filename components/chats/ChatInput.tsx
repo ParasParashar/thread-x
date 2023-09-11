@@ -12,17 +12,12 @@ interface Props {
 const ChatInput = ({ userId, currentUserId }: Props) => {
   const [message, setMessage] = useState("");
 
-  // useEffect(() => {
-  //   socketInstance = io(process.env.NEXT_PUBLIC_SITE_URL!, {
-  //     path: "/api/socket/socket",
-  //     addTrailingSlash: false,
-  //   });
   useEffect(() => {
-    socketInstance = io( {
+    socketInstance = io(process.env.NEXT_PUBLIC_SITE_URL!, {
       path: "/api/socket/socket",
       addTrailingSlash: false,
     });
-    
+
     return () => {
       socketInstance.disconnect();
     };

@@ -6,21 +6,14 @@ import { redirect, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import SmallLoader from "./SmallLoader";
 import {
-  Sheet,
   SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
 } from "@/components/ui/sheet";
-import { Button } from "../ui/button";
 const SliderBox = () => {
   const router = useRouter();
   const [UserConversation, setUserConversation] = useState<any>([]);
   const [loader, setLoader] = useState(true);
   useEffect(() => {
     axios.post("/api/messages").then((res) => {
-      console.log(res.data);
       setUserConversation(res.data);
       setLoader(false);
     });
