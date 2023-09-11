@@ -8,18 +8,20 @@ import SmallLoader from "./SmallLoader";
 import {
   SheetClose,
 } from "@/components/ui/sheet";
+import { getUserConversations } from "@/lib/actions/user.actions";
 const SliderBox = () => {
-  const router = useRouter();
   const [UserConversation, setUserConversation] = useState<any>([]);
   const [loader, setLoader] = useState(true);
   useEffect(() => {
-    axios.post("/api/messages").then((res) => {
-      setUserConversation(res.data);
-      setLoader(false);
-    });
+     async function getData(){
+      const data = await getUserConversations();
+      setUserConversation(data)
+      setLoader(false)
+    }
+    getData();
   }, []);
   return (
-    <div>
+    <div className="mt-5">
       {loader ? (
         <div className="flex items-center justify-center h-[60vh]">
           <SmallLoader />
@@ -38,7 +40,7 @@ const SliderBox = () => {
                 <div key={index} className="mt-3 ">
                   <SheetClose asChild>
                     <Link
-                      className="flex items-center gap-2 rounded-md bg-dark-2 px-7 py-4 border-[#262626] border-y-[3px] hover:bg-[#464646]"
+                      className="flex items-center gap-2 rounded-2xl bg-dark-2 p-4 border-[#262626] border-t-[5px] hover:text-white transition-colors hover:bg-[#464646] text-gray-500 "
                       href={`/messages/${user.id}`}
                     >
                       <div className="relative h-12 w-12 object-cover">
@@ -49,7 +51,7 @@ const SliderBox = () => {
                           className="object-cover rounded-full"
                         />
                       </div>
-                      <span className="text-lg font-semibold text-gray-500 ">
+                      <span className="text-lg font-semibold">
                         {user.name}
                       </span>
                     </Link>

@@ -1,9 +1,7 @@
 "use client";
-import { useEffect, useState } from "react";
+import axios from "axios";
+import { useState } from "react";
 import { IoSend } from "react-icons/io5";
-import io from "socket.io-client";
-let socketInstance: any;
-
 interface Props {
   userId: string;
   currentUserId: string;
@@ -12,26 +10,34 @@ interface Props {
 const ChatInput = ({ userId, currentUserId }: Props) => {
   const [message, setMessage] = useState("");
 
-  useEffect(() => {
-    socketInstance = io(process.env.NEXT_PUBLIC_SITE_URL!, {
-      path: "/api/socket/socket",
-      addTrailingSlash: false,
-    });
+  // useEffect(() => {
+  //   socketInstance = io(process.env.NEXT_PUBLIC_SITE_URL!, {
+  //     path: "/api/socket/socket",
+  //     addTrailingSlash: false,
+  //   });
 
-    return () => {
-      socketInstance.disconnect();
-    };
-  }, []);
+  //   return () => {
+  //     socketInstance.disconnect();
+  //   };
+  // }, []);
 
+  // function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  //   e.preventDefault();
+  //   socketInstance.emit("send-message", {
+  //     content:message,
+  //     userId,
+  //     currentUserId
+  //   });
+  //   setMessage("");
+  // }
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    socketInstance.emit("send-message", {
-      content:message,
-      userId,
-      currentUserId
+    axios.post('/api/messages',{
+      message,
+      userId
     });
     setMessage("");
-  }
+  };
 
   return (
     <form

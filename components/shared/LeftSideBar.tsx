@@ -1,16 +1,13 @@
 "use client";
-import { Sheet, SheetTrigger } from "@/components/ui/sheet";
-import { BiMessageDetail } from "react-icons/bi";
 import { SignOutButton, SignedIn, useAuth } from "@clerk/nextjs";
 import Link from "next/link";
 import { sidebarLinks } from "@/constants";
 import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
-import MessageSlider from "./MessageSlider";
+
 const LeftSideBar = () => {
   const router = useRouter();
   const pathName = usePathname();
-  const { userId } = useAuth();
   return (
     <section className="leftsidebar custom-scrollbar">
       <div className="flex flex-col w-full flex-1 gap-6 px-6">
@@ -34,21 +31,6 @@ const LeftSideBar = () => {
             </Link>
           );
         })}
-        <div className="leftsidebar_link">
-          <Sheet>
-            <SheetTrigger asChild>
-            <div className="flex items-center justify-center">
-                <BiMessageDetail
-                  size={24}
-                  className="font-light cursor-pointer"
-                />
-                <p className="max-sm:hidden text-sm font-semibold">Messages</p>
-              </div>
-            </SheetTrigger>
-            <MessageSlider />
-          </Sheet>
-        </div>
-
         <div className="mt-10 pl-4">
           <SignedIn>
             <SignOutButton signOutCallback={() => router.push("/sign-in")}>

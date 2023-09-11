@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+.logo{
+  width: 1rem;
+  height:1rem;
+}
 .bg-dark-1 {
   /* @apply bg-[#090909] text-white; */
   @apply bg-[#101010] text-white;

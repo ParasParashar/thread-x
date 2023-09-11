@@ -3,10 +3,9 @@ import { Inter } from "next/font/google";
 import "../globals.css";
 import TopBar from "@/components/shared/TopBar";
 import LeftSideBar from "@/components/shared/LeftSideBar";
-import RightSideBar from "@/components/shared/RightSideBar";
 import BottomBar from "@/components/shared/BottomBar";
 export const metadata = {
-  title: "Threads App",
+  title: "Thread X App",
   description: "This is made with latest Next-Js 13.4 version.",
 };
 const inter = Inter({ subsets: ["latin"] });

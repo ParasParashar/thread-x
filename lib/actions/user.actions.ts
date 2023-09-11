@@ -6,6 +6,8 @@ import { connectToDB } from "../mongoose"
 import Thread from "../models/thread.model";
 import mongoose, { FilterQuery, SortOrder } from "mongoose";
 import Community from "../models/community.model";
+import { currentUser } from "@clerk/nextjs";
+import Message from "../models/message.model";
 interface props {
     userId: string;
     userName: string;
@@ -292,3 +294,36 @@ export async function unfollowUser(currentUserId: string, followUserId: string) 
     }
 
 };
+export async function getUserConversations(){
+   try {
+    const user = await currentUser();
+    if (!user) throw Error("user  not found");
+    const userInfo = await User.findOne({ id: user.id });
+    if (!userInfo) throw Error("user not found");
+    const userConversation = await Message.find({
+        $or: [
+            { senderId: userInfo._id },
+            { receiverId: userInfo._id }
+        ]
+    });
+    const uniqueParticipants: Set<string> = new Set();
+        userConversation.forEach((message) => {
+            uniqueParticipants.add(message.senderId.toString());
+            uniqueParticipants.add(message.receiverId.toString());
+        });
+        //deleting userId from participant
+        const userIdString = userInfo._id.toString();
+        uniqueParticipants.delete(userIdString);
+        //creating array of participants then find user data using array
+        const participantIds = Array.from(uniqueParticipants);
+        const participantInfo = await User.find({
+            _id: {
+                $in: participantIds
+            }
+        })
+        .select('id image name');
+        return participantInfo;
+   } catch (error:any) {
+    throw new Error('Something Went Wrong'+error.message)
+   }
+}
