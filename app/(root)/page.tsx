@@ -9,7 +9,7 @@ export default async function Home() {
   if(!user) redirect('/sign-in')
   return (
     <>
-      <section className="mt-9 felx flex-col gap-10">
+      <section className="mt-9 felx flex-col gap-10 ">
         {result.posts.length === 0 ? (
           <p className="text-lg text-center font-mono">No threads</p>
         ):(

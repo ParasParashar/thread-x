@@ -4,7 +4,7 @@ import User from "@/lib/models/user.model";
 import { connectToDB } from "@/lib/mongoose"
 import { pusherServer } from "@/lib/pusher";
 import { currentUser } from "@clerk/nextjs";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
 export async function POST(
     request: Request,
@@ -12,7 +12,7 @@ export async function POST(
     try {
         connectToDB();
         const body = await request.json();
-        const { message, userId } = body;
+        const { message, userId ,image} = body;
         const user = await currentUser();
         if (!user) throw Error("user  not found");
         const userInfo = await User.findOne({ id: user.id });
@@ -22,10 +22,11 @@ export async function POST(
         const newMessage = await Message.create({
             content: message,
             senderId: userInfo._id,
-            receiverId: convertatorUserInfo._id
+            receiverId: convertatorUserInfo._id,
+            image:image
         });
         // using pusher for real times data
-        await pusherServer.trigger(userId,'message:new',newMessage);
+        await pusherServer.trigger(userId, 'message:new', newMessage);
         return NextResponse.json(newMessage);
     } catch (error: any) {
         throw new Error("Something Went Wrong" + error.message);

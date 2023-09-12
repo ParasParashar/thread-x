@@ -1,15 +1,14 @@
 import Message from "@/lib/models/message.model";
 import { connectToDB } from "@/lib/mongoose";
-import { pusherServer } from "@/lib/pusher";
-import { NextApiRequest, NextApiResponse } from "next";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
-export async function GET(request: NextRequest) {
-    const url = new URL(request.url);
-    const userId = url.searchParams.get('userId');
-    const currentUserId = url.searchParams.get('currentUserId');
+export async function POST(
+    request: Request,
+) {
     try {
         connectToDB();
+        const body = await request.json();
+        const {currentUserId,userId} =body;
         const messages = await Message.find({
             $or:[
                 {senderId:currentUserId,receiverId:userId},

@@ -8,7 +8,7 @@ interface props{
 }
 const ChatHeader = ({image,name,paramId}:props) => {
   return (
-    <nav className="bg-[#272727] p-1">
+    <nav className="bg-[#272727] p-1 px-3 rounded-t-lg">
         <div className="flex items-center gap-2">
           <div className="relative h-14 w-14 object-cover">
             <Link href={`/profile/${paramId}`}>
@@ -16,7 +16,7 @@ const ChatHeader = ({image,name,paramId}:props) => {
                 src={image}
                 fill
                 alt="Profile Image"
-                className="rounded-full object-contain"
+                className="rounded-full object-cover"
               />
             </Link>
           </div>

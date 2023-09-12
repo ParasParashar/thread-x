@@ -1,7 +1,9 @@
 "use client";
 import axios from "axios";
+import { CldUploadButton } from "next-cloudinary";
 import { useState } from "react";
 import { IoSend } from "react-icons/io5";
+import { HiPhotograph } from "react-icons/hi";
 interface Props {
   userId: string;
   currentUserId: string;
@@ -32,32 +34,41 @@ const ChatInput = ({ userId, currentUserId }: Props) => {
   // }
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    axios.post('/api/messages',{
+    axios.post("/api/messages", {
       message,
-      userId
+      userId,
     });
     setMessage("");
+  }
+  const handleUpload = (result: any) => {
+    axios.post("/api/messages", {
+      image: result.info.secure_url,
+      userId: userId,
+    });
   };
-
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="flex items-center w-full bg-[#272727] text-white px-1 py-2"
-    >
-      <input
-        type="text"
-        className="w-full px-3 py-2 bg-[#272727] text-white focus:outline-none focus:border-[#d7d0d0] border-b-[2px]"
-        autoComplete={"off"}
-        required
-        value={message}
-        onChange={(e: any) => setMessage(e.target.value)}
-        placeholder="Type your message..."
-      />
-      <button className="p-1 rounded-lg text-gray-400 hover:bg-[#353535] flex items-center">
-        <span className="max-sm:hidden mr-2">Send</span>
-        <IoSend size={25} />
-      </button>
-    </form>
+    <div className="flex items-center w-full bg-[#272727] text-white p-3 rounded-b-lg ">
+      <CldUploadButton
+        onUpload={handleUpload}
+        uploadPreset="vyin2ao7"
+        options={{ maxFiles: 1 }}
+      >
+        <HiPhotograph size={30} />
+      </CldUploadButton>
+      <form onSubmit={handleSubmit} className="flex items-center w-full ">
+        <input
+          type="text"
+          className="w-full px-3 py-1 bg-[#272727] text-white focus:outline-none mx-2 focus:border-[#d7d0d0] border-b-[2px]"
+          autoComplete={"off"}
+          value={message}
+          onChange={(e: any) => setMessage(e.target.value)}
+          placeholder="Type your message..."
+        />
+        <button className="p-2 text-center transition-colors hover:text- rounded-full hover:text-gray-400 bg-gray-500  hover:bg-[#653535] flex items-center">
+          <IoSend size={25} />
+        </button>
+      </form>
+    </div>
   );
 };
 

@@ -2,13 +2,15 @@
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import SmallLoader from "../shared/SmallLoader";
-import { format, previousDay } from "date-fns";
+import { format } from "date-fns";
 import { pusherClient } from "@/lib/pusher";
-// import { find } from "lodash";
+import { find } from "lodash";
+import Image from "next/image";
 interface Message {
   userId: string;
   currentUserId: string;
   content?: string;
+  image?: string;
   createdAt?: any;
   senderId?: string;
 }
@@ -25,47 +27,53 @@ const ChatArea = ({ userId, currentUserId }: Message) => {
 
   useEffect(() => {
     axios
-      .get(`/api/conversations`, {
-        params: {
-          userId,
-          currentUserId,
-        },
+      .post(`/api/conversations`, {
+        userId,
+        currentUserId,
       })
       .then((res) => {
         setData(res.data);
         setLoading(false);
       });
-  }, [currentUserId, userId]);
+  }, [userId, currentUserId]);
 
   useEffect(() => {
     pusherClient.subscribe(userId);
+    pusherClient.subscribe(currentUserId);
+    const messageHandler = (message: any) => {
+      axios.post(`/api/conversations`, {
+        userId,
+        currentUserId,
+      });
+      setData((current: any) => {
+        if (find(current, { id: message.id })) {
+          return current;
+        }
+        return [...current, message];
+      });
+      setLoading(false);
+    };
 
-    pusherClient.bind("message:new", (obj: any) => {
-      console.log(obj,'object')
-      setData((prev) => [...prev, obj]);
-    });
-    console.log(data,'updated Data');
+    pusherClient.bind("message:new", messageHandler);
+
     return () => {
       pusherClient.unsubscribe(userId);
-      pusherClient.unbind("message:new");
+      pusherClient.unbind("message:new", messageHandler);
     };
   }, [userId]);
-  useEffect(() => {
-    console.log(data, 'updated Data');
-  }, [data]);
-  
+
   return (
     <div
       className="flex-grow backdrop:blur-xl p-4
-     min-h-[300px] max-h-[350px]
-     max-sm:min-h-[450px] max-sm:max-h-[450px]
+     min-h-[400px] max-h-[450px]
+     max-sm:min-h-[300px] max-sm:max-h-[320px]
       border-[#272727] border-[5px]"
     >
       <div
         ref={messageRef}
         className="h-full relative 
-        max-sm:max-h-[400px]
-        max-h-[300px] 
+        max-sm:max-h-[300px]
+        max-h-[400px] 
         overflow-y-auto scrollbar-custom-class overflow-x-hidden px-2 "
       >
         {loading ? (
@@ -87,6 +95,34 @@ const ChatArea = ({ userId, currentUserId }: Message) => {
                     : "bg-[#333232]"
                 } text-gray-300 rounded-lg p-2 min-w-[5rem] max-w-xs break-words overflow-wrap`}
               >
+                {id.image && (
+                  <div className="mb-2">
+                    <div
+                      className={`relative
+                      lg:min-w-[15rem] lg:max-w-[30rem]
+                      lg:min-h-[15rem] lg:max-h-[30rem]
+                      md:min-w-[13rem] md:max-w-[27rem]
+                      md:min-h-[13rem] md:max-h-[27rem]
+                       min-w-[10rem] max-w-xs
+                        min-h-[10rem] max-h-xs  
+                         bg-gray-200 rounded-lg overflow-hidden ${
+                        id.senderId === currentUserId
+                          ? "float-right"
+                          : "float-left"
+                      }`}
+                    >
+                      <Image
+                        src={id.image}
+                        alt="Image"
+                        layout="fill"
+                        objectFit="cover"
+                        className=" cursor-pointer 
+                        hover:scale-110 
+                        transition translate"
+                      />
+                    </div>
+                  </div>
+                )}
                 {id.content}
                 <div className="text-xs text-gray-400">
                   {format(new Date(id.createdAt), "p")}

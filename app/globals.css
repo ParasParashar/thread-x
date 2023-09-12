@@ -2,9 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+body{
+  @apply custom-scrollbar
+}
 .logo{
-  width: 1rem;
-  height:1rem;
+  width: 20px;
+  height:20px;
 }
 .bg-dark-1 {
   /* @apply bg-[#090909] text-white; */
@@ -33,10 +36,10 @@
   @apply text-2xl font-bold
 }
 .main-container {
-  @apply flex min-h-screen flex-1 flex-col items-center bg-dark-1 px-6 pb-10 pt-28 max-md:pb-32 sm:px-10;
+  @apply flex min-h-screen flex-1 flex-col items-center bg-dark-1 px-6 pb-10 pt-28 max-md:pb-32 sm:px-10  ;
 }
 .topbar {
-  @apply fixed top-0 z-30 flex w-full items-center justify-between px-6 py-3 backdrop-blur-lg;
+  @apply fixed top-0 z-30 flex w-full items-center justify-between px-6 py-3 backdrop-blur-xl;
 }
 
 .leftsidebar {
@@ -74,7 +77,7 @@
 
 @layer utilities {
   .scrollbar-custom-class::-webkit-scrollbar{
-    width: 1px;
+    width: 2px;
     height: 1px;
     border-radius: 25%;
   }
@@ -89,17 +92,17 @@
   }
 
   .custom-scrollbar::-webkit-scrollbar {
-    width: 3px;
-    height: 3px;
+    width: 10px;
+    height: 5px;
     border-radius: 2px;
   }
 
   .custom-scrollbar::-webkit-scrollbar-track {
-    background: #09090a;
+    background-color: transparent;
   }
 
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: #5c5c7b;
+    background: #262626;
     border-radius: 50px;
   }
 

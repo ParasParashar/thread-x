@@ -34,9 +34,7 @@ const TopBar = () => {
       flex items-center gap-4
       "
       >
-        {/* <CgCommunity size={52} className="text-blue-600" /> */}
-        <img alt="Logo" src="/assets/threadx.png"  className="logo" />
-        <p className="text-light font-serif max-xs:hidden font-bold text-lg">
+        <p className="text-light font-serif font-extrabold text-2xl text-blue-500">
           Thread X
         </p>
       </Link>

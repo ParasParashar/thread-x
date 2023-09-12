@@ -9,7 +9,7 @@ const messageSchema = new mongoose.Schema({
         ref:'User',
     },
     content:String,
-    attachment:String,
+    image:String,
 },
 {
     timestamps: true
