@@ -1,3 +1,4 @@
+import { currentUser } from '@clerk/nextjs';
 import PusherServer from 'pusher'
 import PusherClient from 'pusher-js'
 export const pusherServer = new PusherServer({
@@ -7,7 +8,15 @@ export const pusherServer = new PusherServer({
     cluster: 'ap2',
     useTLS: true
 });
-export const pusherClient = new PusherClient(process.env.NEXT_PUBLIC_PUSHER_APP_KEY!,{
-    cluster:'ap2'
-}
+
+
+export const pusherClient = new PusherClient(
+    process.env.NEXT_PUBLIC_PUSHER_APP_KEY!,
+    {
+        channelAuthorization: {
+            endpoint: '/api/pusher/auth',
+            transport: 'ajax',
+        },
+        cluster: 'ap2',
+    }
 );

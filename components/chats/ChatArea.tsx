@@ -64,10 +64,9 @@ const ChatArea = ({ userId, currentUserId }: Message) => {
 
   return (
     <div
-      className="flex-grow backdrop:blur-xl p-4
-     min-h-[400px] max-h-[450px]
-     max-sm:min-h-[300px] max-sm:max-h-[320px]
-      border-[#272727] border-[5px]"
+      className="flex-grow p-4
+     min-h-[400px] max-h-[450px] bg-gradient-to-b from-[#272727] via-slate-950 to-red-500;
+      border-[#272727] border-x-[5px]"
     >
       <div
         ref={messageRef}
@@ -91,11 +90,11 @@ const ChatArea = ({ userId, currentUserId }: Message) => {
               <div
                 className={`${
                   id.senderId === currentUserId
-                    ? "bg-[#1b1a1aef]  "
-                    : "bg-[#333232]"
-                } text-gray-300 rounded-lg p-2 min-w-[5rem] max-w-xs break-words overflow-wrap`}
+                    ? "bg-[#7070ff]/60 rounded-tr-2xl  rounded-tl-2xl rounded-bl-2xl "
+                    : "bg-[#141e36] rounded-tr-2xl rounded-tl-2xl  rounded-br-2xl "
+                } text-white px-3 py-2 min-w-[5rem] max-w-xs break-words overflow-wrap`}
               >
-                {id.image && (
+                {id. image && (
                   <div className="mb-2">
                     <div
                       className={`relative
@@ -124,7 +123,7 @@ const ChatArea = ({ userId, currentUserId }: Message) => {
                   </div>
                 )}
                 {id.content}
-                <div className="text-xs text-gray-400">
+                <div className="text-xs mt-1 text-neutral-200">
                   {format(new Date(id.createdAt), "p")}
                 </div>
               </div>

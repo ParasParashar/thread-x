@@ -4,6 +4,7 @@ import "../globals.css";
 import TopBar from "@/components/shared/TopBar";
 import LeftSideBar from "@/components/shared/LeftSideBar";
 import BottomBar from "@/components/shared/BottomBar";
+import ActiveStatus from "@/components/chats/ActiveStatus";
 export const metadata = {
   title: "Thread X App",
   description: "This is made with latest Next-Js 13.4 version.",
@@ -19,7 +20,10 @@ const layout = ({ children }: { children: React.ReactNode }) => {
           <main className="flex flex-row">
             <LeftSideBar />
             <section className="main-container">
-              <div className="w-full max-w-4xl">{children}</div>
+              <div className="w-full max-w-4xl">
+                <ActiveStatus/>
+                {children}
+                </div>
             </section>
           </main>
           <BottomBar />
