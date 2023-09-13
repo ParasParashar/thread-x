@@ -71,7 +71,6 @@ const ChatArea = ({ userId, currentUserId }: Message) => {
       <div
         ref={messageRef}
         className="h-full relative 
-        max-sm:max-h-[300px]
         max-h-[400px] 
         overflow-y-auto scrollbar-custom-class overflow-x-hidden px-2 "
       >
