@@ -15,8 +15,8 @@ const MessageSlider = () => {
     <>
       <SheetContent className="bg-dark-1 max-sm:h-full w-full">
         <SheetHeader>
-          <SheetTitle className="head-text bg-dark-1 text-xl">
-            Message
+          <SheetTitle className="head-text text-xl text-gray-400 text-center">
+            Conversations
           </SheetTitle>
         </SheetHeader>
         <SheetDescription>

@@ -1,5 +1,4 @@
 "use client";
-import axios from "axios";
 import Link from "next/link";
 import Image from "next/image";
 import { redirect, useRouter } from "next/navigation";
@@ -40,7 +39,7 @@ const SliderBox = () => {
                 <div key={index} className="mt-3 ">
                   <SheetClose asChild>
                     <Link
-                      className="flex items-center gap-2 rounded-2xl bg-dark-2 p-4 border-[#262626] border-t-[5px] hover:text-white transition-colors hover:bg-[#464646] text-gray-500 "
+                      className="flex items-center gap-2 rounded-2xl p-4 border-[#262626] border-y-[5px] hover:text-white transition-colors hover:bg-[#464646] bg-[#25262970] text-gray-500 "
                       href={`/messages/${user.id}`}
                     >
                       <div className="relative h-12 w-12 object-cover">
@@ -51,9 +50,13 @@ const SliderBox = () => {
                           className="object-cover rounded-full"
                         />
                       </div>
-                      <span className="text-lg font-semibold">
+                      <p className="text-lg font-semibold">
                         {user.name}
-                      </span>
+                      </p>
+                      <p className="text-xs font-light">
+                        started a conversations
+                      </p>
+
                     </Link>
                   </SheetClose>
                 </div>

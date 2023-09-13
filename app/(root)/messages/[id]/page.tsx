@@ -8,7 +8,6 @@ import { redirect } from "next/navigation";
 import ChatArea from "@/components/chats/ChatArea";
 
 const Page = async ({ params }: { params: { id: string } }) => {
-  let socket: any;
   const user = await currentUser();
   if (!user) redirect("/sign-in");
   const currentUserInfo =await fetchUser(user.id);
@@ -20,6 +19,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
         paramId={params.id}
         name={userInfo.name}
         image={userInfo.image}
+        userId={userInfo.id}
       />
       <ChatArea currentUserId={currentUserInfo._id} userId={userInfo._id} />
       <ChatInput currentUserId={currentUserInfo._id} userId={userInfo._id} />

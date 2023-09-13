@@ -6,7 +6,7 @@ import { connectToDB } from "../mongoose"
 import Thread from "../models/thread.model";
 import mongoose, { FilterQuery, SortOrder } from "mongoose";
 import Community from "../models/community.model";
-import { currentUser } from "@clerk/nextjs";
+import { currentUser} from "@clerk/nextjs";
 import Message from "../models/message.model";
 interface props {
     userId: string;
@@ -281,7 +281,7 @@ export async function acceptsFriendRequests(currentUserId: string, acceptedId: s
 export async function unfollowUser(currentUserId: string, followUserId: string) {
     try {
         connectToDB();
-        console.log(currentUserId,followUserId,'werlid')
+        console.log(currentUserId, followUserId, 'werlid')
         const user = await User.findOne({ id: currentUserId });
         const followUser = await User.findOne({ id: followUserId });
         if (!user) throw new Error("user not Found");
@@ -294,19 +294,19 @@ export async function unfollowUser(currentUserId: string, followUserId: string) 
     }
 
 };
-export async function getUserConversations(){
-   try {
-    const user = await currentUser();
-    if (!user) throw Error("user  not found");
-    const userInfo = await User.findOne({ id: user.id });
-    if (!userInfo) throw Error("user not found");
-    const userConversation = await Message.find({
-        $or: [
-            { senderId: userInfo._id },
-            { receiverId: userInfo._id }
-        ]
-    });
-    const uniqueParticipants: Set<string> = new Set();
+export async function getUserConversations() {
+    try {
+        const user = await currentUser();
+        if (!user) throw Error("user  not found");
+        const userInfo = await User.findOne({ id: user.id });
+        if (!userInfo) throw Error("user not found");
+        const userConversation = await Message.find({
+            $or: [
+                { senderId: userInfo._id },
+                { receiverId: userInfo._id }
+            ]
+        });
+        const uniqueParticipants: Set<string> = new Set();
         userConversation.forEach((message) => {
             uniqueParticipants.add(message.senderId.toString());
             uniqueParticipants.add(message.receiverId.toString());
@@ -321,9 +321,33 @@ export async function getUserConversations(){
                 $in: participantIds
             }
         })
-        .select('id image name');
+            .select('id image name');
         return participantInfo;
-   } catch (error:any) {
-    throw new Error('Something Went Wrong'+error.message)
-   }
+    } catch (error: any) {
+        throw new Error('Something Went Wrong' + error.message)
+    }
+}
+export async function deleteUsersChats(paramsId: string) {
+    try {
+        connectToDB();
+        const currentUserInfo = await currentUser();
+        if (!currentUserInfo) throw Error("Currentuser not found");
+        const currnetUserId= await User.findOne({id:currentUserInfo.id});
+        const user = await User.findOne({ id: paramsId });
+        if (!user) throw Error("user not found");
+        console.log(currnetUserId._id,'currentuser',user._id,'user')
+        const result = await Message.deleteMany({
+            $or: [
+                { senderId: currnetUserId._id, receiverId: user._id },
+                { senderId: user._id, receiverId: currnetUserId._id }
+            ]
+        });
+
+        console.log('Deleted Messages:', result);
+        console.log('work correctly')
+        revalidatePath(`/messages/${paramsId}`);
+        return {success:true}
+    } catch (error: any) {
+        throw new Error("Something went wrong" + error.message);
+    }
 }

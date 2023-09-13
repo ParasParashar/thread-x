@@ -34,7 +34,7 @@ const TopBar = () => {
       flex items-center gap-4
       "
       >
-        <p className="text-light font-serif font-extrabold text-2xl text-blue-500">
+        <p className="text-light font-serif font-extrabold text-3xl text-blue-700">
           Thread X
         </p>
       </Link>
