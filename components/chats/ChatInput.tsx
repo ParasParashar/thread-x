@@ -4,47 +4,52 @@ import { CldUploadButton } from "next-cloudinary";
 import { useState } from "react";
 import { IoSend } from "react-icons/io5";
 import { HiPhotograph } from "react-icons/hi";
+import toast from "react-hot-toast";
 interface Props {
-  userId: string;
-  currentUserId: string;
+  userId?: string;
+  currentUserId?: string;
+  communityId?: string;
+  type: "community" | "chat";
 }
 
-const ChatInput = ({ userId, currentUserId }: Props) => {
+const ChatInput = ({ userId, currentUserId, communityId, type }: Props) => {
   const [message, setMessage] = useState("");
 
-  // useEffect(() => {
-  //   socketInstance = io(process.env.NEXT_PUBLIC_SITE_URL!, {
-  //     path: "/api/socket/socket",
-  //     addTrailingSlash: false,
-  //   });
-
-  //   return () => {
-  //     socketInstance.disconnect();
-  //   };
-  // }, []);
-
-  // function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-  //   e.preventDefault();
-  //   socketInstance.emit("send-message", {
-  //     content:message,
-  //     userId,
-  //     currentUserId
-  //   });
-  //   setMessage("");
-  // }
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    axios.post("/api/messages", {
-      message,
-      userId,
-    });
+    if (type === "chat") {
+      axios.post("/api/messages", {
+        message,
+        userId,
+      });
+    } else {
+      axios
+        .post("/api/messages/community", {
+          communityId,
+          message,
+        })
+        .then((res) => {
+          if (!res.data) {
+            toast.error("Only Member can send the message");
+            console.log('work')
+          }
+        })
+        .catch(() => toast.error("Something went Wrong"));
+    }
+
     setMessage("");
   }
   const handleUpload = (result: any) => {
-    axios.post("/api/messages", {
-      image: result.info.secure_url,
-      userId: userId,
-    });
+    if (type === "chat") {
+      axios.post("/api/messages", {
+        image: result.info.secure_url,
+        userId: userId,
+      });
+    } else {
+      axios.post("/api/messages/community", {
+        image: result.info.secure_url,
+      });
+    }
   };
   return (
     <div className="flex items-center w-full bg-[#272727] text-white p-3 rounded-b-lg ">
@@ -53,7 +58,7 @@ const ChatInput = ({ userId, currentUserId }: Props) => {
         uploadPreset="vyin2ao7"
         options={{ maxFiles: 1 }}
       >
-        <HiPhotograph size={30} className="text-blue-400"/>
+        <HiPhotograph size={30} className="text-blue-400" />
       </CldUploadButton>
       <form onSubmit={handleSubmit} className="flex items-center w-full ">
         <input

@@ -22,7 +22,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
         userId={userInfo.id}
       />
       <ChatArea currentUserId={currentUserInfo._id} userId={userInfo._id} />
-      <ChatInput currentUserId={currentUserInfo._id} userId={userInfo._id} />
+      <ChatInput currentUserId={currentUserInfo._id} userId={userInfo._id} type="chat" />
     </div>
   );
 };

@@ -1,4 +1,3 @@
-import { currentUser } from '@clerk/nextjs';
 import PusherServer from 'pusher'
 import PusherClient from 'pusher-js'
 export const pusherServer = new PusherServer({

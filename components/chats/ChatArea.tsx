@@ -39,7 +39,7 @@ const ChatArea = ({ userId, currentUserId }: Message) => {
 
   useEffect(() => {
     pusherClient.subscribe(userId);
-    pusherClient.subscribe(currentUserId);
+    // pusherClient.subscribe(currentUserId);
     const messageHandler = (message: any) => {
       axios.post(`/api/conversations`, {
         userId,
@@ -78,7 +78,7 @@ const ChatArea = ({ userId, currentUserId }: Message) => {
           <p className="flex justify-center items-center h-[30vh]">
             <SmallLoader />
           </p>
-        ) : (
+        ) : data.length > 0 ? (
           data.map((id, index) => (
             <div
               key={index}
@@ -93,21 +93,21 @@ const ChatArea = ({ userId, currentUserId }: Message) => {
                     : "bg-[#141e36] rounded-tr-2xl rounded-tl-2xl  rounded-br-2xl "
                 } text-white px-3 py-2 min-w-[5rem] max-w-xs break-words overflow-wrap`}
               >
-                {id. image && (
+                {id.image && (
                   <div className="mb-2">
                     <div
                       className={`relative
-                      lg:min-w-[15rem] lg:max-w-[30rem]
-                      lg:min-h-[15rem] lg:max-h-[30rem]
-                      md:min-w-[13rem] md:max-w-[27rem]
-                      md:min-h-[13rem] md:max-h-[27rem]
-                       min-w-[10rem] max-w-xs
-                        min-h-[10rem] max-h-xs  
-                         bg-gray-200 rounded-lg overflow-hidden ${
-                        id.senderId === currentUserId
-                          ? "float-right"
-                          : "float-left"
-                      }`}
+                        lg:min-w-[15rem] lg:max-w-[30rem]
+                        lg:min-h-[15rem] lg:max-h-[30rem]
+                        md:min-w-[13rem] md:max-w-[27rem]
+                        md:min-h-[13rem] md:max-h-[27rem]
+                         min-w-[10rem] max-w-xs
+                          min-h-[10rem] max-h-xs  
+                           bg-gray-200 rounded-lg overflow-hidden ${
+                             id.senderId === currentUserId
+                               ? "float-right"
+                               : "float-left"
+                           }`}
                     >
                       <Image
                         src={id.image}
@@ -115,8 +115,8 @@ const ChatArea = ({ userId, currentUserId }: Message) => {
                         layout="fill"
                         objectFit="cover"
                         className=" cursor-pointer 
-                        hover:scale-110 
-                        transition translate"
+                          hover:scale-110 
+                          transition translate"
                       />
                     </div>
                   </div>
@@ -128,6 +128,10 @@ const ChatArea = ({ userId, currentUserId }: Message) => {
               </div>
             </div>
           ))
+        ) : (
+          <div className="head-text text-gray-600 font-light text-center">
+            !!No Messages
+          </div>
         )}
       </div>
     </div>

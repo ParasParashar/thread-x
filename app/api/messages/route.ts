@@ -1,4 +1,3 @@
-import { fetchUser } from "@/lib/actions/user.actions";
 import Message from "@/lib/models/message.model";
 import User from "@/lib/models/user.model";
 import { connectToDB } from "@/lib/mongoose"

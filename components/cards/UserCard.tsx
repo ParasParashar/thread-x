@@ -15,16 +15,17 @@ const UserCard = ({ id, name, username, imgUrl, personType }: props) => {
   return (
     <article className="user-card">
       <div className="user-card_avatar">
+        <div className="relative w-14 h-14 object-cover">
         <Image
           src={imgUrl}
           alt="Logo"
-          width={48}
-          height={48}
-          className="rounded-full"
-        />
+          fill
+          className="rounded-full object-cover"
+          />
+          </div>
         <div className="flex-1 text-ellipsis">
           <div className="font-semibold">{name}</div>
-          <p className="text-sm text-gray-700">@{username}</p>
+          <p className="text-sm text-gray-600">@{username}</p>
         </div>
       <Button className="user-card_btn "
       onClick={()=>router.push(`/profile/${id}`)}>

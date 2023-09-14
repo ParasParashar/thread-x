@@ -5,6 +5,7 @@ import TopBar from "@/components/shared/TopBar";
 import LeftSideBar from "@/components/shared/LeftSideBar";
 import BottomBar from "@/components/shared/BottomBar";
 import ActiveStatus from "@/components/chats/ActiveStatus";
+import ToasterProvider from "@/components/cards/Toaster";
 export const metadata = {
   title: "Thread X App",
   description: "This is made with latest Next-Js 13.4 version.",
@@ -21,6 +22,7 @@ const layout = ({ children }: { children: React.ReactNode }) => {
             <LeftSideBar />
             <section className="main-container">
               <div className="w-full max-w-4xl">
+                <ToasterProvider/>
                 <ActiveStatus/>
                 {children}
                 </div>

@@ -8,6 +8,7 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import { deleteUsersChats } from "@/lib/actions/user.actions";
 import { useRouter } from "next/navigation";
 import SmallLoader from "../shared/SmallLoader";
+import useActiveList from "@/app/hooks/useActiveList";
 
 interface props {
   image: string;
@@ -17,11 +18,11 @@ interface props {
 }
 
 const ChatHeader = ({ image, name, paramId, userId }: props) => {
+  const {members} = useActiveList();
+  const isActiveUsers =members.includes(paramId);
   const router = useRouter();
   const [loader, setLoader] = useState(false);
   const [isShow, setIsShow] = useState(false);
-  const [isUserActive, setIsUserActive] = useState(false);
-  const [activeMembers, setActiveMembers] = useState<string[]>([]);
   const handleShow = () => {
     setIsShow(!isShow);
   };
@@ -33,34 +34,6 @@ const ChatHeader = ({ image, name, paramId, userId }: props) => {
     router.refresh();
   }, [paramId, router]);
 
-
-  useEffect(() => {
-    pusherClient.connection.bind("error", (err: Error) => {
-      console.error("Pusher Error:", err);
-    });
-
-    const channel = pusherClient.subscribe("presence-messenger");
-
-    channel.bind("pusher:subscription_succeeded", (members: any) => {
-      const memberIds = members.map((member: any) => member.id);
-      setActiveMembers(memberIds);
-      setIsUserActive(true);
-    });
-
-    channel.bind("pusher:member_added", (member: any) => {
-      setActiveMembers((prevMembers) => [...prevMembers, member.id]);
-      setIsUserActive(true);
-    });
-
-    channel.bind("pusher:member_removed", (member: any) => {
-      setActiveMembers((prevMembers) =>
-        prevMembers.filter((id) => id !== member.id)
-      );
-      setIsUserActive(false);
-    });
-  }, []);
-
-  const isUserOnline = isUserActive;
 
   return (
     <nav className="bg-[#272727] p-1 px-3 rounded-t-lg flex items-center justify-between">
@@ -77,7 +50,7 @@ const ChatHeader = ({ image, name, paramId, userId }: props) => {
         </div>
         <Link href={`/profile/${paramId}`}>
           <h2 className="text-left text-sm font-semibold">{name}</h2>
-          {isUserOnline && (
+          {isActiveUsers && (
             <span className="text-xs text-gray-600">Active</span>
           )}
         </Link>

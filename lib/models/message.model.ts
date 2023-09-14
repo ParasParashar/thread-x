@@ -8,6 +8,10 @@ const messageSchema = new mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref:'User',
     },
+    communityId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Community', 
+      },
     content:String,
     image:String,
 },

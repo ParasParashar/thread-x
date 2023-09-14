@@ -297,36 +297,62 @@ export async function unfollowUser(currentUserId: string, followUserId: string) 
 export async function getUserConversations() {
     try {
         const user = await currentUser();
-        if (!user) throw Error("user  not found");
+        if (!user) throw Error("User not found");
         const userInfo = await User.findOne({ id: user.id });
-        if (!userInfo) throw Error("user not found");
+        if (!userInfo) throw Error("User not found");
+        
         const userConversation = await Message.find({
             $or: [
                 { senderId: userInfo._id },
-                { receiverId: userInfo._id }
+                { receiverId: userInfo._id },
+                { communityId: userInfo.communities } 
             ]
         });
-        const uniqueParticipants: Set<string> = new Set();
+
+        //  unique participant ID and community ID
+        const uniqueParticipants = new Set<string>();
+        const uniqueCommunities = new Set<string>();
+        
         userConversation.forEach((message) => {
-            uniqueParticipants.add(message.senderId.toString());
-            uniqueParticipants.add(message.receiverId.toString());
+            if (message.senderId) uniqueParticipants.add(message.senderId.toString());
+            if (message.receiverId) uniqueParticipants.add(message.receiverId.toString());
+            if (message.communityId) {
+                uniqueParticipants.add(message.communityId.toString());
+                uniqueCommunities.add(message.communityId.toString());
+            }
         });
-        //deleting userId from participant
-        const userIdString = userInfo._id.toString();
-        uniqueParticipants.delete(userIdString);
-        //creating array of participants then find user data using array
+
+        // Remove the user's ids
+        uniqueParticipants.delete(userInfo._id.toString());
+
+        //  user data for the remaining participant IDs
         const participantIds = Array.from(uniqueParticipants);
         const participantInfo = await User.find({
             _id: {
                 $in: participantIds
             }
-        })
-            .select('id image name');
-        return participantInfo;
+        }).select('id image name');
+
+        // list of communities where the user is active
+        const activeCommunities = Array.from(uniqueCommunities);
+
+        //  community data for the active 
+        const communityInfo = await Community.find({
+            _id: {
+                $in: activeCommunities
+            }
+        }).select('_id name image'); 
+
+        return {
+            participantInfo,
+            communityInfo,
+        };
     } catch (error: any) {
-        throw new Error('Something Went Wrong' + error.message)
+        throw new Error('Something Went Wrong' + error.message);
     }
 }
+
+
 export async function deleteUsersChats(paramsId: string) {
     try {
         connectToDB();
