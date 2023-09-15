@@ -10,11 +10,10 @@ interface params {
     text: string;
     author: string;
     communityId: string | null | Array<string>;
-    path: string;
     image?: string;
 
 }
-export async function createthread({ text, communityId, author, path ,image }: params) {
+export async function createthread({ text, communityId, author ,image }: params) {
     try {
         connectToDB();
         const communityIdObject = await Community.findOne(

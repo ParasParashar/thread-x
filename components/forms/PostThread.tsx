@@ -1,131 +1,6 @@
-// "use client";
-
-// import * as z from "zod";
-// import User from "@/lib/models/user.model";
-// import { useForm } from "react-hook-form";
-// import { zodResolver } from "@hookform/resolvers/zod";
-// import { usePathname, useRouter } from "next/navigation";
-
-// import {
-//   Form,
-//   FormControl,
-//   FormDescription,
-//   FormField,
-//   FormItem,
-//   FormLabel,
-//   FormMessage,
-// } from "@/components/ui/form";
-// import {
-//   Select,
-//   SelectContent,
-//   SelectItem,
-//   SelectTrigger,
-//   SelectValue,
-// } from "@/components/ui/select";
-// import { Button } from "@/components/ui/button";
-// import { Textarea } from "@/components/ui/textarea";
-// import { ThreadValidation } from "@/lib/validations/thread";
-// import { createthread } from "@/lib/actions/thread.action";
-// interface Props {
-//   userId: string;
-//   userCommunityId: string[];
-// }
-
-// const PostThread = ({ userId, userCommunityId }: Props) => {
-//   const router = useRouter();
-//   const pathname = usePathname();
-//   const form = useForm<z.infer<typeof ThreadValidation>>({
-//     resolver: zodResolver(ThreadValidation),
-//     defaultValues: {
-//       thread: "",
-//       community:"",
-//       accountId: userId,
-//     },
-//   });
-//   const onSubmit = async (values: z.infer<typeof ThreadValidation>) => {
-//     await createthread({
-//       text: values.thread,
-//       author: userId,
-//       communityId: values.community !=="" ? values.community : null,
-//       path: pathname,
-//     });
-//     router.push("/");
-//   };
-//   return (
-//     <Form {...form}>
-
-//       <form
-//         onSubmit={form.handleSubmit(onSubmit)}
-//         className="mt-10 flex flex-col justify-start gap-10"
-//       >
-//         <FormField
-//           control={form.control}
-//           name="thread"
-//           render={({ field }) => (
-//             <FormItem className="flex flex-col gap-3 w-full">
-//               <FormLabel className="font-semibold text-gray-400">Content</FormLabel>
-//               <FormControl>
-//                 <Textarea
-//                 required
-//                   rows={10}
-//                   className="account-form-input no-focus"
-//                   {...field}
-//                 />
-//               </FormControl>
-//               <FormMessage />
-//             </FormItem>
-//           )}
-//         />
-//        <FormField
-//           control={form.control}
-//           name="community"
-//           render={({ field }) => (
-//             <FormItem>
-//               <FormLabel className="text-gray-400 text-sm font-bold">
-//                 For Community
-//                 </FormLabel>
-//               <Select onValueChange={field.onChange} defaultValue={field.value}>
-//                 <FormControl>
-//                   <SelectTrigger className="bg-dark-1">
-//                     <SelectValue placeholder="Select where you want to create Thread." className="bg-gray-300" />
-//                   </SelectTrigger>
-//                 </FormControl>
-//                   {userCommunityId.length === 0?(
-//                     <>
-//                     <p>Currently You don't Join or have your own communiy.</p>
-//                     <SelectContent className="bg-dark-2 text-white">
-//                   <SelectItem value="">Personal Thread</SelectItem>
-//                   </SelectContent>
-//                        </>
-//                   ):(
-//                     <>
-//                     <SelectContent className="bg-dark-2 text-white">
-//                      {userCommunityId.map((community:any)=>(
-//                   <SelectItem aria-required value={community._id}>{community.name}</SelectItem>
-//                     ))}
-//                   <SelectItem value="">Personal Thread</SelectItem>
-//                   </SelectContent>
-//                     </>
-//                   )}
-
-//                   </Select>
-//               <FormMessage />
-//             </FormItem>
-//           )}
-//         />
-//         <Button type="submit" className="bg-blue-500">
-//           Create
-//         </Button>
-//       </form>
-//     </Form>
-//   );
-// };
-
-// export default PostThread;
 "use client";
 import React, { useState } from "react";
-import * as z from "zod";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import ImageUpload from "../shared/ImageUpload";
 import { createthread } from "@/lib/actions/thread.action";
 
@@ -136,7 +11,6 @@ interface Props {
 
 const PostThread = ({ userId, userCommunityId }: Props) => {
   const router = useRouter();
-  const pathname = usePathname();
   const [formData, setFormData] = useState({
     thread: "",
     community: "",
@@ -160,7 +34,6 @@ const PostThread = ({ userId, userCommunityId }: Props) => {
       text: formData.thread,
       author: userId,
       communityId: formData.community !== "" ? formData.community : null,
-      path: pathname,
       image: image,
     });
     router.push("/");

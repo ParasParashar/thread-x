@@ -25,7 +25,7 @@ export async function POST(
             image:image
         });
         // using pusher for real times data
-        await pusherServer.trigger(userId, 'message:new', newMessage);
+        await pusherServer.trigger('common-channel', 'message:new', newMessage);
         return NextResponse.json(newMessage);
     } catch (error: any) {
         throw new Error("Something Went Wrong" + error.message);
