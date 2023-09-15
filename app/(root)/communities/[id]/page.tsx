@@ -58,8 +58,8 @@ async function Page({ params }: { params: { id: string } }) {
             ))}
             <TabsTrigger value="messages" className="tab">
                <MdGroups2
-                  size={24}
-                  className='object-contain '
+                  size={28}
+                  className='object-contain text-[#545470] '
                 />
                 <p className='max-sm:hidden'>Messages</p>
               </TabsTrigger>

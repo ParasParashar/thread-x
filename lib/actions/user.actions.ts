@@ -6,7 +6,7 @@ import { connectToDB } from "../mongoose"
 import Thread from "../models/thread.model";
 import mongoose, { FilterQuery, SortOrder } from "mongoose";
 import Community from "../models/community.model";
-import { currentUser} from "@clerk/nextjs";
+import { currentUser } from "@clerk/nextjs";
 import Message from "../models/message.model";
 interface props {
     userId: string;
@@ -44,6 +44,7 @@ export async function updateUser({
         throw new Error('Failed to Create User');
     }
 }
+
 export async function fetchUser(userId: string) {
     try {
         connectToDB();
@@ -84,6 +85,7 @@ export async function fetchUserPosts(userId: string) {
         throw new Error(error)
     }
 }
+
 export async function fetchUsers({
     userId,
     searchString = "",
@@ -99,6 +101,7 @@ export async function fetchUsers({
 }) {
     try {
         connectToDB();
+        console.log(searchString, 'wrk')
         const skipAmount = (pageNumber - 1) * pageSize;
         const regex = new RegExp(searchString, "i");
         const query: FilterQuery<typeof User> = {
@@ -128,6 +131,7 @@ export async function fetchUsers({
         throw new Error(error)
     }
 };
+
 export async function getActivity(userId: string) {
     try {
         connectToDB();
@@ -150,6 +154,7 @@ export async function getActivity(userId: string) {
     }
 
 }
+
 export async function getUserReplies(userId: string) {
     try {
         connectToDB();
@@ -162,6 +167,7 @@ export async function getUserReplies(userId: string) {
         throw new Error(error);
     }
 }
+
 export async function filterUserFavorite(currentUserId: string, threadId: string) {
     try {
         connectToDB();
@@ -175,6 +181,7 @@ export async function filterUserFavorite(currentUserId: string, threadId: string
         throw new Error('Error: ' + error.message);
     }
 }
+
 export async function filterUserRepost(currentUserId: string, threadId: string) {
     try {
         connectToDB();
@@ -188,6 +195,7 @@ export async function filterUserRepost(currentUserId: string, threadId: string) 
         throw new Error('Error: ' + error.message);
     }
 }
+
 export async function filterUserFollow(currentUserId: string, followUserId: string) {
     try {
         connectToDB();
@@ -232,6 +240,7 @@ export async function filterUserFollowers(currentUserId: string) {
         throw new Error('Error: ' + error.message);
     }
 };
+
 export async function getRequests(currentUserId: string) {
     try {
         connectToDB();
@@ -248,6 +257,7 @@ export async function getRequests(currentUserId: string) {
     }
 
 }
+
 export async function acceptsFriendRequests(currentUserId: string, acceptedId: string) {
     try {
         connectToDB();
@@ -278,6 +288,7 @@ export async function acceptsFriendRequests(currentUserId: string, acceptedId: s
     }
 
 };
+
 export async function unfollowUser(currentUserId: string, followUserId: string) {
     try {
         connectToDB();
@@ -294,25 +305,26 @@ export async function unfollowUser(currentUserId: string, followUserId: string) 
     }
 
 };
+
 export async function getUserConversations() {
     try {
         const user = await currentUser();
         if (!user) throw Error("User not found");
         const userInfo = await User.findOne({ id: user.id });
         if (!userInfo) throw Error("User not found");
-        
+
         const userConversation = await Message.find({
             $or: [
                 { senderId: userInfo._id },
                 { receiverId: userInfo._id },
-                { communityId: userInfo.communities } 
+                { communityId: userInfo.communities }
             ]
         });
 
         //  unique participant ID and community ID
         const uniqueParticipants = new Set<string>();
         const uniqueCommunities = new Set<string>();
-        
+
         userConversation.forEach((message) => {
             if (message.senderId) uniqueParticipants.add(message.senderId.toString());
             if (message.receiverId) uniqueParticipants.add(message.receiverId.toString());
@@ -341,7 +353,7 @@ export async function getUserConversations() {
             _id: {
                 $in: activeCommunities
             }
-        }).select('_id name image'); 
+        }).select('_id name image');
 
         return {
             participantInfo,
@@ -352,16 +364,15 @@ export async function getUserConversations() {
     }
 }
 
-
 export async function deleteUsersChats(paramsId: string) {
     try {
         connectToDB();
         const currentUserInfo = await currentUser();
         if (!currentUserInfo) throw Error("Currentuser not found");
-        const currnetUserId= await User.findOne({id:currentUserInfo.id});
+        const currnetUserId = await User.findOne({ id: currentUserInfo.id });
         const user = await User.findOne({ id: paramsId });
         if (!user) throw Error("user not found");
-        console.log(currnetUserId._id,'currentuser',user._id,'user')
+        console.log(currnetUserId._id, 'currentuser', user._id, 'user')
         const result = await Message.deleteMany({
             $or: [
                 { senderId: currnetUserId._id, receiverId: user._id },
@@ -372,8 +383,25 @@ export async function deleteUsersChats(paramsId: string) {
         console.log('Deleted Messages:', result);
         console.log('work correctly')
         revalidatePath(`/messages/${paramsId}`);
-        return {success:true}
+        return { success: true }
     } catch (error: any) {
         throw new Error("Something went wrong" + error.message);
+    }
+}
+
+export default async function searchUser(searchQuery: string) {
+    try {
+        connectToDB();
+        const userData = await currentUser();
+        const userId = userData?.id;
+        const user = await User.find({
+            id:{$ne:userId}
+        });
+        const filterSearch = user.filter((user) =>
+            user.name.split(' ').join('').toLowerCase().includes(searchQuery.split(' ').join('').toLowerCase())
+        )
+        return filterSearch;
+    } catch (error) {
+        throw new Error('Soemthing went wrong')
     }
 }

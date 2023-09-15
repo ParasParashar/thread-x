@@ -81,7 +81,7 @@ async function CommunityCard({
 
         {members.length > 0 && (
           <div className="flex items-center">
-            {members.map((member, index) => (
+            {members.slice(0,2).map((member, index) => (
               <div
                 key={index}
                 className="relative w-8 h-8 rounded-full object-cover"

@@ -127,7 +127,7 @@ body{
    data-[state=active]:border-b-[#707274] border-b-[3px] border-b-[#262626]  data-[state=active]:text-gray-400 !important;
 }
 .user-card {
-  @apply flex flex-col justify-between gap-4 border-y-[3px] shadow-lg border-[#262626] p-1 rounded-xl ;
+  @apply flex items-center justify-between gap-4 border-y-[3px] shadow-lg border-[#262626] p-1 rounded-xl ;
 }
 
 .user-card_avatar {
@@ -135,7 +135,7 @@ body{
 }
 
 .user-card_btn {
-  @apply hover:bg-slate-900 h-auto min-w-[74px] rounded-lg bg-blue-500 text-[12px] text-white transition !important;
+  @apply   p-2 rounded-lg hover:bg-[#2f2f2f] text-[12px] text-gray-300 transition hover:text-white ;
 }
 
 .searchbar {

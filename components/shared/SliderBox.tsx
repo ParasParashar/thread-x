@@ -5,6 +5,7 @@ import SmallLoader from "./SmallLoader";
 import { getUserConversations } from "@/lib/actions/user.actions";
 import toast from "react-hot-toast";
 import { SheetClose } from "../ui/sheet";
+import SearchBar from "./SearchBar";
 
 const SliderBox = () => {
   const [data, setData] = useState<any>({});
@@ -14,6 +15,7 @@ const SliderBox = () => {
     async function fetchData() {
       try {
         const response = await getUserConversations();
+        console.log(response,'data conversations')
         setData(response);
         setLoader(false);
       } catch (error) {
@@ -26,6 +28,7 @@ const SliderBox = () => {
 
   return (
     <div className="mt-5">
+      <SearchBar type="search"/>
       {loader ? (
         <div className="flex items-center justify-center h-[60vh]">
           <SmallLoader />

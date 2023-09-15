@@ -58,8 +58,8 @@ const ThreadCard = ({
         </div>
       )}
       <article
-        className={`flex flex-col w-full lg:w-8/12 xl:9/12 md:9/12 border-y-[3px] shadow-xl border-[#262626] rounded-2xl ${
-          isComment ? "px-0 ma-sm:px-7 p-1" : "bg-dark-2 p-7 mt-5"
+        className={`flex flex-col w-full lg:w-8/12 xl:9/12 md:9/12 shadow-xl  rounded-2xl ${
+          isComment ? "px-0 ma-sm:px-7 p-1" : "bg-dark-2 p-7 mt-5  border-y-[3px]  border-[#262626]"
         }`}
       >
         <div className="flex items-start justify-between">
@@ -76,6 +76,8 @@ const ThreadCard = ({
                   className="rounded-full cursor-pointer"
                 />
               </Link>
+
+              {isComment && <div className="thread-card_bar" />}
               {comments.length > 0 && <div className="thread-card_bar" />}
             </div>
             <div className="flex w-full flex-col">
@@ -123,33 +125,31 @@ const ThreadCard = ({
                   />
                 </div>
                 <div className="flex items-center gap-3">
+                <Link href={`/thread/${id}`} className="flex items-center">
                   {comments.length > 0 && (
                     <>
-                      {comments.map((comment: any, index: number) => (
-                        <div
-                          key={index}
-                          className={`relative h-5 w-5 object-cover ${
-                            index !== 0 && "-ml-2"
-                          }`}
-                        >
-                          <Image
-                            src={comment.author.image || "./assets/members.svg"}
-                            alt="Comment Profile Image"
-                            fill
-                            className={`rounded-full object-cover ${
-                              index !== 0 && "absolute"
-                            } `}
-                          />
-                        </div>
+                      {comments.slice(0,2).map((comment: any, index: number) => (
+                       <div
+                       key={index}
+                       className="relative w-6 h-6 rounded-full object-cover"
+                     >
+                       <Image
+                         src={comment?.author?.image || './assets/user.svg'}
+                         alt='commentator profile image'
+                         fill
+                         className={`${
+                           index !== 0 && "-ml-2"
+                         } rounded-full object-cover`}
+                       />
+                     </div>
                       ))}
-                      <Link href={`/thread/${id}`}>
                         <p className="mt-1 text-[15px] text-gray-400 hover:text-neutral-200 span-x-2 ">
                           {comments?.length}&nbsp;
                           {comments?.length > 1 ? <>replies</> : <>reply</>}
                         </p>
-                      </Link>
                     </>
                   )}
+                  </Link>
                   {likes.length > 0 && (
                     <p className="mt-1 text-[15px] text-gray-400 hover:text-neutral-200  ">
                       {likes.length} likes

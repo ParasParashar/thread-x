@@ -42,20 +42,25 @@ async function Page() {
           />
           <Dialog>
             <DialogTrigger asChild>
-              <p className="ml-1 rounded-sm text-gray-500 font-semibold hover:text-gray-600 px-2 py-1 cursor-pointer flex gap-4">
-                {followers.map((user,index)=>(
-               <Image
-               key={user.id}
-               width="20"
-               height="20"
-               src={user.image}
-               alt="Followers User Profile"
-               className={`${
-                index !== 0 && "-ml-2"
-              } rounded-full object-cover`}
-             />
+            <p className="ml-1 rounded-sm text-gray-500 font-semibold hover:text-gray-600 px-2 py-1 cursor-pointer flex items-center gap-2">
+                {followers.slice(0,2).map((user, index) => (
+                   <div
+                   key={index}
+                   className="relative w-8 h-8 rounded-full object-cover"
+                 >
+                   <Image
+                     src={user.image}
+                     alt={`user_${index}`}
+                     fill
+                     className={`${
+                       index !== 0 && "-ml-5"
+                     } rounded-full object-cover`}
+                   />
+                 </div>
                 ))}
-                <span className="text-gray-400 font-light ">{followers.length}</span>
+                <span className="text-gray-400 font-light ">
+                  {followers.length}+
+                </span>
                 Followers
               </p>
             </DialogTrigger>

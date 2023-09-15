@@ -46,27 +46,28 @@ const Comment = ({ threadId, currentUserImg, currentUserId }: props) => {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="mt-10 flex flex-row justify-start items-center gap-10"
+          className="mt-10 flex flex-row justify-start items-center gap-10 bg-[#232222]  p-2 rounded-lg "
         >
           <FormField
             control={form.control}
             name="thread"
             render={({ field }) => (
-              <FormItem className="flex items-center gap-3 w-full">
+              <FormItem className="flex items-center gap-3 w-full ">
                 <FormLabel>
+                  <div className="relative w-16 h-16 object-cover">
                   <Image
                     src={currentUserImg}
                     alt="Profile Image"
                     className="rounded-full object-cover"
-                    width={48}
-                    height={48}
-                  />
+                   fill
+                    />
+                    </div>
                 </FormLabel>
                 <FormControl className="border-none bg-transparent">
                   <Input
                     type="text"
                     placeholder="Comment..."
-                    className="account-form-input no-focus"
+                    className="border text-lg text-white focus:outline-none p-2 focus:border-[#a2b8e0] border-b-[2px]"
                     {...field}
                   />
                 </FormControl>
