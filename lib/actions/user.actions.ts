@@ -306,7 +306,7 @@ export async function unfollowUser(currentUserId: string, followUserId: string) 
 
 };
 
-export async function getUserConversations() {
+export async function getUserConversations(pathName:string) {
     try {
         const user = await currentUser();
         if (!user) throw Error("User not found");
@@ -354,7 +354,7 @@ export async function getUserConversations() {
                 $in: activeCommunities
             }
         }).select('_id name image');
-
+        revalidatePath(pathName);
         return {
             participantInfo,
             communityInfo,

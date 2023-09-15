@@ -31,7 +31,7 @@ const ChatHeader = ({ image, name, paramId, userId }: props) => {
     await deleteUsersChats(paramId);
     setLoader(false);
     setIsShow(false);
-    router.refresh();
+    router.back();
   }, [paramId, router]);
 
 

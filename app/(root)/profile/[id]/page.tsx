@@ -25,16 +25,13 @@ import FollowAndUnfollow from "@/components/shared/FollowAndUnfollow";
 async function Page({ params }: { params: { id: string } }) {
   const user = await currentUser();
   if (!user) return null;
-  const currentUserDetails = await fetchUser(user.id);
   const userInfo = await fetchUser(params.id);
   if (!userInfo?.onboarded) redirect("/onboarding");
   const userReplies = await getUserReplies(userInfo._id);
   const totalParentThreads = await fetchUserPosts(userInfo.id);
   const userCommunityFind = await userCommunity(userInfo._id);
   const followers = await filterUserFollowers(userInfo._id);
-  const CurrnetUserfollowings = await filterUserFollowing(
-    currentUserDetails._id
-  );
+ 
   return (
     <section>
       <div className="flex items-center justify-between">

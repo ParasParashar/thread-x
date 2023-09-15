@@ -16,7 +16,10 @@ const layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={`${inter.className} bg-dark-1`}>
+      <head>
+          <link rel="icon" href="./favicon.ico" sizes="any" />
+        </head>    
+            <body className={`${inter.className} bg-dark-1`}>
           <TopBar />
           <main className="flex flex-row">
             <LeftSideBar />

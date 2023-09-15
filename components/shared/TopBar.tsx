@@ -9,10 +9,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { SignOutButton, SignedIn } from "@clerk/nextjs";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
-import Image from "next/image";
 import Link from "next/link";
 import { PiSignOutBold } from "react-icons/pi";
-import { CgCommunity } from "react-icons/cg";
 import { BiMenuAltRight } from "react-icons/bi";
 import { AiOutlinePlus } from "react-icons/ai";
 import { useRouter } from "next/navigation";
@@ -30,10 +28,7 @@ const TopBar = () => {
     <nav className="topbar">
       <Link
         href={"/"}
-        className="
-      flex items-center gap-4
-      "
-      >
+        className="flex items-center gap-4">
         <p className="text-light font-serif font-extrabold text-3xl text-blue-700">
           Thread X
         </p>

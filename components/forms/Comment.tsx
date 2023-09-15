@@ -67,6 +67,7 @@ const Comment = ({ threadId, currentUserImg, currentUserId }: props) => {
                   <Input
                     type="text"
                     placeholder="Comment..."
+                    autoComplete="off"
                     className="border text-lg text-white focus:outline-none p-2 focus:border-[#a2b8e0] border-b-[2px]"
                     {...field}
                   />
