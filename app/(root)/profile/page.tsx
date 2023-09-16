@@ -19,6 +19,7 @@ import { userCommunity } from "@/lib/actions/community.action";
 import CommunityCard from "@/components/cards/CommunityCard";
 import { BiEditAlt } from "react-icons/bi";
 import FollowersModel from "@/components/shared/FollowersModel";
+import toast from "react-hot-toast";
 async function Page() {
   const user = await currentUser();
   if (!user) return null;
@@ -42,21 +43,21 @@ async function Page() {
           />
           <Dialog>
             <DialogTrigger asChild>
-            <p className="ml-1 rounded-sm text-gray-500 font-semibold hover:text-gray-600 px-2 py-1 cursor-pointer flex items-center gap-2">
-                {followers.slice(0,2).map((user, index) => (
-                   <div
-                   key={index}
-                   className="relative w-8 h-8 rounded-full object-cover"
-                 >
-                   <Image
-                     src={user.image}
-                     alt={`user_${index}`}
-                     fill
-                     className={`${
-                       index !== 0 && "-ml-5"
-                     } rounded-full object-cover`}
-                   />
-                 </div>
+              <p className="ml-1 rounded-sm text-gray-500 font-semibold hover:text-gray-600 px-2 py-1 cursor-pointer flex items-center gap-2">
+                {followers.slice(0, 2).map((user, index) => (
+                  <div
+                    key={index}
+                    className="relative w-8 h-8 rounded-full object-cover"
+                  >
+                    <Image
+                      src={user.image}
+                      alt={`user_${index}`}
+                      fill
+                      className={`${
+                        index !== 0 && "-ml-5"
+                      } rounded-full object-cover`}
+                    />
+                  </div>
                 ))}
                 <span className="text-gray-400 font-light ">
                   {followers.length}+
@@ -64,7 +65,7 @@ async function Page() {
                 Followers
               </p>
             </DialogTrigger>
-            <FollowersModel userId={userInfo._id} id={userInfo.id}  />
+            <FollowersModel userId={userInfo._id} id={userInfo.id} />
           </Dialog>
         </div>
         <Link
@@ -182,7 +183,7 @@ async function Page() {
                           Communities Created by {userInfo.name}
                         </h1>
                         <section className="mt-5 flex flex-wrap gap-4">
-                          {userCommunityFind.map((community: any) => (
+                          {userCommunityFind?.map((community: any) => (
                             <div
                               key={community.id}
                               className="grid grid-cols-2 gap-4"
@@ -223,11 +224,11 @@ async function Page() {
                         Communities join by {userInfo.name}
                       </h1>
                       {userInfo.communities.map((activity: any) => (
-                        <Link
-                          key={activity.id}
-                          href={`/communities/${activity._id}`}
-                        >
-                          <article className="activity-card justify-between mt-5">
+                        <article className="activity-card justify-between mt-5">
+                          <Link
+                            key={activity.id}
+                            href={`/communities/${activity._id}`}
+                          >
                             <div className="flex gap-3">
                               <Image
                                 src={activity.image}
@@ -242,12 +243,12 @@ async function Page() {
                                 </span>
                               </p>
                             </div>
-                            <LeaveButton
-                              id={activity._id}
-                              members={userInfo._id}
-                            />
-                          </article>
-                        </Link>
+                          </Link>
+                          <LeaveButton
+                            id={activity._id}
+                            members={userInfo._id}
+                          />
+                        </article>
                       ))}
                     </div>
                   )}

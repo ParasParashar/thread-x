@@ -19,12 +19,12 @@ async function page() {
   const userInfo = await fetchUser(user.id);
   if (!userInfo?.onboarded) redirect("/onboarding");
   const activity = await getActivity(userInfo._id);
-  const request = await getRequests(userInfo._id);
+  const request = await getRequests();
   return (
     <section>
       <h1 className="head-text font-light text-gray-600">Activity</h1>
 
-      <Tabs defaultValue="threads" className="w-full">
+      <Tabs defaultValue="replies" className="w-full">
         <TabsList className="tab">
           <TabsTrigger value="replies" className="tab">
             Replies

@@ -96,41 +96,14 @@ export async function fetchCommunityPosts(id: string) {
   }
 }
 
-export async function fetchCommunities({
-  searchString = "",
-  pageNumber = 1,
-  pageSize = 20,
-  sortBy = "desc",
-}: {
-  searchString?: string;
-  pageNumber?: number;
-  pageSize?: number;
-  sortBy?: SortOrder;
-}) {
+export async function fetchCommunities() {
   try {
     connectToDB();
-    const skipAmount = (pageNumber - 1) * pageSize;
-    const regex = new RegExp(searchString, "i");
-    const query: FilterQuery<typeof Community> = {};
-    if (searchString.trim() !== "") {
-      query.$or = [
-        { username: { $regex: regex } },
-        { name: { $regex: regex } },
-      ];
-    }
-    const sortOptions = { createdAt: sortBy };
-    const communitiesQuery = Community.find(query)
-      .sort(sortOptions)
-      .skip(skipAmount)
-      .limit(pageSize)
+    const communitiesQuery =await Community.find()
+      .sort()
       .populate("members");
 
-    const totalCommunitiesCount = await Community.countDocuments(query);
-
-    const communities = await communitiesQuery.exec();
-    const isNext = totalCommunitiesCount > skipAmount + communities.length;
-
-    return { communities, isNext };
+    return communitiesQuery;
   } catch (error) {
     console.error("Error fetching communities:", error);
     throw error;

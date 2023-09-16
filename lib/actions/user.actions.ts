@@ -241,16 +241,17 @@ export async function filterUserFollowers(currentUserId: string) {
     }
 };
 
-export async function getRequests(currentUserId: string) {
+export async function getRequests() {
     try {
         connectToDB();
-        const user = await User.findOne({ _id: currentUserId })
+        const userData= await currentUser();
+        if (!userData) throw new Error("user not Found");
+        const user = await User.findOne({ id: userData.id })
             .populate({
                 path: 'followRequests',
                 model: User,
                 select: 'id _id image name'
             });
-        if (!user) throw new Error("user not Found");
         return user;
     } catch (error: any) {
         throw new Error('Error: ' + error.message);

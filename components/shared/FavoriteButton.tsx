@@ -1,7 +1,7 @@
 "use client";
 import useFavorite from "@/app/hooks/useFavorite";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 type props = {
   currentUserId: string;
@@ -10,7 +10,13 @@ type props = {
 
 const Favorite = ({ currentUserId, id }: props) => {
   const [isScaling, setIsScaling] = useState(false);
+  const [check,setCheck]=useState(false);
   const { hasFavorited, toggleFavorite } = useFavorite({ currentUserId, id });
+
+  useEffect(()=>{
+    setCheck(hasFavorited);
+  },[hasFavorited]);
+
 
   const handleButtonClick = (e: React.MouseEvent<HTMLDivElement>) => {
       toggleFavorite(e);
@@ -25,7 +31,7 @@ const Favorite = ({ currentUserId, id }: props) => {
       onClick={handleButtonClick}
       className="hover:bg-[#1e1e1e] relative rounded-full cursor-pointer p-1"
     >
-      {hasFavorited ? (
+      {check ? (
         <AiFillHeart
         onClick={(e: any) => handleButtonClick(e)}
         size={24}

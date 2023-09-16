@@ -16,13 +16,15 @@ const userSchema = new mongoose.Schema({
     communities:[
         {
             type:mongoose.Schema.Types.ObjectId,
-            ref:'Community'
+            ref:'Community',
+            unique:true
         }
     ],
     favorite:[
         {
             type:mongoose.Schema.Types.ObjectId,
             ref:'Thread',
+            unique:true,
         }
     ],
     followRequests:[

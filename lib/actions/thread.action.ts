@@ -4,7 +4,6 @@ import Thread from "../models/thread.model";
 import User from "../models/user.model";
 import { connectToDB } from "../mongoose";
 import Community from "../models/community.model";
-import { promise } from "zod";
 
 interface params {
     text: string;
@@ -66,8 +65,7 @@ export async function fetchPosts(pageNumber = 1, pageSize = 20) {
                 select: '_id ,name,parentId,image'
             }
         })
-        .populate({ path: 'community', model: 'Community' })
-        ;
+        .populate({ path: 'community', model: 'Community' });
     //  This is how pagination work
     const totolPostCount = await Thread.countDocuments(
         {
@@ -141,9 +139,8 @@ export async function addCommentToThread(
     } catch (error: any) {
         throw new Error(error);
     }
-
-
 }
+
 export async function deleteThread(currentUserId: string, threadId: string) {
     try {
         connectToDB();
@@ -177,5 +174,31 @@ export async function deleteThread(currentUserId: string, threadId: string) {
     } catch (error: any) {
         throw new Error(error);
 
+    }
+}
+export async function findThreadOfUserFollowing(currentUserId:string){
+    try {
+        connectToDB();
+        const user = await User.findOne({id:currentUserId});
+        if(!user) throw new Error('User not found');
+        const threads = await Thread.find({
+                parentId:{$in:[null,undefined]},
+                author:{$in:user.following}
+        })
+        .populate({
+            path:'children',
+            model:Thread,
+            populate:{
+                path:'author',
+                model:User,
+                select: '_id ,name,parentId,image'
+            }
+        })
+        .populate({ path: 'community', model: 'Community' })
+        .populate({path:'author',model:'User'})
+        .sort({ createdAt: 'desc' });
+         return threads;
+    } catch (error:any) {
+        throw new Error('Something Went Wrong'+error.message);
     }
 }

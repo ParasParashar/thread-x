@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import ImageUpload from "../shared/ImageUpload";
 import { createthread } from "@/lib/actions/thread.action";
+import toast from "react-hot-toast";
 
 interface Props {
   userId: string;
@@ -29,14 +30,16 @@ const PostThread = ({ userId, userCommunityId }: Props) => {
     setImage(selectedImage);
   };
 
-  const onSubmit = async () => {
+  const onSubmit = async (e:React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     await createthread({
       text: formData.thread,
       author: userId,
       communityId: formData.community !== "" ? formData.community : null,
       image: image,
     });
-    router.push("/");
+    toast.success('New Thread Created');
+    router.push('/');
   };
 
   return (

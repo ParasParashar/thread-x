@@ -3,6 +3,7 @@ import { RiDeleteBin2Line } from "react-icons/ri";
 import { deleteThread } from "@/lib/actions/thread.action";
 import { deleteCommunity } from "@/lib/actions/community.action";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 interface props {
   currentUserId?: string;
   threadId?: string;
@@ -13,11 +14,13 @@ const DeleteButton = ({ currentUserId, threadId, type, communityId }: props) => 
   const router = useRouter();
   const handleDelete = async (currentUserId: string, threadId: string) => {
     await deleteThread(currentUserId, threadId);
+    toast.success('Thread Deleted Successfully');
     router.refresh();
   };
 
   const handleDeleteCommunity = async (communityId: string) => {
     await deleteCommunity(communityId);
+    toast.success('Community Deleted Successfully')
     router.refresh();
   };
 

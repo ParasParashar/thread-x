@@ -1,26 +1,43 @@
-"use client"
+"use client";
 
-import {removeUserFromCommunity } from "@/lib/actions/community.action";
+import { removeUserFromCommunity } from "@/lib/actions/community.action";
 import { useRouter } from "next/navigation";
+import { useCallback } from "react";
+import toast from "react-hot-toast";
 
-interface Buttonprops{
-    id: string;
-    members:string ;
+interface Buttonprops {
+  id: string;
+  members: string;
 }
-const LeaveButton = ({id,members}:Buttonprops) => {
-  const router= useRouter();
-      const onLeaveCommunity=async() => {
-        await removeUserFromCommunity(members,id);
+const LeaveButton = ({ id, members }: Buttonprops) => {
+  const router = useRouter();
+
+  // const onLeaveCommunity = async () => {
+  //   console.log("jflsjdf");
+  //   await removeUserFromCommunity(members, id);
+  //   toast.success("Success");
+  //   router.refresh();
+  // };
+  const onLeaveCommunity = useCallback(
+    async (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.preventDefault();
+      try {
+        await removeUserFromCommunity(members, id);
+        toast.success("Success");
         router.refresh();
-     };
-  return (
-          
-    <button
-    onClick={onLeaveCommunity}
-    className="bg-blue-950 hover:bg-slate-700 hover:text-white text-sm text-gray-400 p-2 rounded-full cursor-pointer font-serif">
-    Leave 
-  </button>
-  )
-}
+      } catch (error) {
+        toast.error("something went wrong");
+      }
+    },[]);
 
-export default LeaveButton
+  return (
+    <button
+      onClick={onLeaveCommunity}
+      className="bg-blue-950 hover:bg-slate-700 hover:text-white text-sm text-gray-400 p-2 rounded-full cursor-pointer font-serif"
+    >
+      Leave
+    </button>
+  );
+};
+
+export default LeaveButton;

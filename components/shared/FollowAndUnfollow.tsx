@@ -19,7 +19,6 @@ const FollowAndUnfollow = ({ currentUserId, followUserId }: props) => {
             setShow(data);
             setLoading(false); 
         }
-
         getUserNetwork();
     }, []);
 

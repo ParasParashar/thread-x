@@ -21,7 +21,7 @@ const SliderBox = () => {
         setData(response);
         setLoader(false);
       } catch (error) {
-        toast.error("Error Fetching data !!!");
+        toast.error("Error Fetching data  Reload the page To solve!!!");
       }
     }
 
