@@ -403,6 +403,6 @@ export default async function searchUser(searchQuery: string) {
         )
         return filterSearch;
     } catch (error) {
-        throw new Error('Soemthing went wrong')
+        throw new Error('Something went wrong')
     }
 }

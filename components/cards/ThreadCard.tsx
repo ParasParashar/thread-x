@@ -114,15 +114,6 @@ const ThreadCard = ({
                       className="cursor-pointer object-contain"
                     />
                   </Link>
-                  <Repost currentUserId={currentUserId} id={id} />
-
-                  <Image
-                    src="/assets/share.svg"
-                    alt="heart"
-                    width={24}
-                    height={24}
-                    className="cursor-pointer object-contain"
-                  />
                 </div>
                 <div className="flex items-center gap-3">
                 <Link href={`/thread/${id}`} className="flex items-center">
