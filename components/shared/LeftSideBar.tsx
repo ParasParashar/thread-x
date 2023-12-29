@@ -30,7 +30,6 @@ const LeftSideBar = () => {
 
     fetchData();
   }, []);
-  console.log(noReq, "skdjfsd");
   const router = useRouter();
   const pathName = usePathname();
   return (

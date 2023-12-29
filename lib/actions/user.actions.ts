@@ -101,7 +101,6 @@ export async function fetchUsers({
 }) {
     try {
         connectToDB();
-        console.log(searchString, 'wrk')
         const skipAmount = (pageNumber - 1) * pageSize;
         const regex = new RegExp(searchString, "i");
         const query: FilterQuery<typeof User> = {
