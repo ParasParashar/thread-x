@@ -58,8 +58,8 @@ const ThreadCard = ({
         </div>
       )}
       <article
-        className={`flex flex-col w-full lg:w-8/12 xl:9/12 md:9/12 shadow-xl  rounded-2xl ${
-          isComment ? "px-0 ma-sm:px-7 p-1" : "bg-dark-2 p-7 mt-5  border-y-[3px]  border-[#262626]"
+        className={`flex flex-col w-full lg:w-8/12 xl:9/12 md:9/12  rounded-2xl ${
+          isComment ? "px-0 ma-sm:px-7 p-1" : "bg-dark-2 p-7 mt-5  shadow-xl border-y-[3px]  border-[#262626]"
         }`}
       >
         <div className="flex items-start justify-between">

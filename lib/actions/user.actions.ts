@@ -86,50 +86,6 @@ export async function fetchUserPosts(userId: string) {
     }
 }
 
-export async function fetchUsers({
-    userId,
-    searchString = "",
-    pageNumber = 1,
-    pageSize = 20,
-    sortBy = 'desc'
-}: {
-    userId: string;
-    searchString?: string;
-    pageNumber?: number;
-    pageSize?: number;
-    sortBy?: SortOrder;
-}) {
-    try {
-        connectToDB();
-        const skipAmount = (pageNumber - 1) * pageSize;
-        const regex = new RegExp(searchString, "i");
-        const query: FilterQuery<typeof User> = {
-            id: { $ne: userId },
-        };
-        if (searchString.trim() !== "") {
-            query.$or = [
-                { username: { $regex: regex } },
-                { name: { $regex: regex } },
-            ];
-        };
-        const sortOptions = { createdAt: sortBy };
-
-        const usersQuery = User.find(query)
-            .sort(sortOptions)
-            .skip(skipAmount)
-            .limit(pageSize);
-
-        const totalUsersCount = await User.countDocuments(query);
-
-        const users = await usersQuery.exec();
-
-        const isNext = totalUsersCount > skipAmount + users.length;
-
-        return { users, isNext };
-    } catch (error: any) {
-        throw new Error(error)
-    }
-};
 
 export async function getActivity(userId: string) {
     try {
@@ -243,7 +199,7 @@ export async function filterUserFollowers(currentUserId: string) {
 export async function getRequests() {
     try {
         connectToDB();
-        const userData= await currentUser();
+        const userData = await currentUser();
         if (!userData) throw new Error("user not Found");
         const user = await User.findOne({ id: userData.id })
             .populate({
@@ -264,7 +220,6 @@ export async function acceptsFriendRequests(currentUserId: string, acceptedId: s
         const user = await User.findOne({ _id: currentUserId });
         const AcceptedUser = await User.findOne({ _id: acceptedId });
         if (!user) throw new Error("user not Found");
-        console.log(AcceptedUser._id, 'accepts');
         if (user.followRequests.includes(AcceptedUser._id)) {
             await User.updateOne(
                 { _id: user._id },
@@ -292,7 +247,6 @@ export async function acceptsFriendRequests(currentUserId: string, acceptedId: s
 export async function unfollowUser(currentUserId: string, followUserId: string) {
     try {
         connectToDB();
-        console.log(currentUserId, followUserId, 'werlid')
         const user = await User.findOne({ id: currentUserId });
         const followUser = await User.findOne({ id: followUserId });
         if (!user) throw new Error("user not Found");
@@ -306,7 +260,7 @@ export async function unfollowUser(currentUserId: string, followUserId: string) 
 
 };
 
-export async function getUserConversations(pathName:string) {
+export async function getUserConversations(pathName: string) {
     try {
         const user = await currentUser();
         if (!user) throw Error("User not found");
@@ -372,7 +326,6 @@ export async function deleteUsersChats(paramsId: string) {
         const currnetUserId = await User.findOne({ id: currentUserInfo.id });
         const user = await User.findOne({ id: paramsId });
         if (!user) throw Error("user not found");
-        console.log(currnetUserId._id, 'currentuser', user._id, 'user')
         const result = await Message.deleteMany({
             $or: [
                 { senderId: currnetUserId._id, receiverId: user._id },
@@ -395,7 +348,7 @@ export default async function searchUser(searchQuery: string) {
         const userData = await currentUser();
         const userId = userData?.id;
         const user = await User.find({
-            id:{$ne:userId}
+            id: { $ne: userId }
         });
         const filterSearch = user.filter((user) =>
             user.name.split(' ').join('').toLowerCase().includes(searchQuery.split(' ').join('').toLowerCase())
