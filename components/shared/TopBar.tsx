@@ -26,9 +26,7 @@ const TopBar = () => {
   if (!user) return null;
   return (
     <nav className="topbar">
-      <Link
-        href={"/"}
-        className="flex items-center gap-4">
+      <Link href={"/"} className="flex items-center gap-4">
         <p className="text-light font-serif font-extrabold text-3xl text-blue-700">
           Thread X
         </p>

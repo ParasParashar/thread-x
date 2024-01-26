@@ -1,38 +1,50 @@
 "use client";
 import { BsSearch } from "react-icons/bs";
 import searchUser from "@/lib/actions/user.actions";
-import { useEffect, useState } from "react";
-import UserCard from "../cards/UserCard";
+import { useEffect, useMemo, useState } from "react";
 import SmallLoader from "./SmallLoader";
 import { SheetClose } from "../ui/sheet";
+import { debounce } from "@/lib/utils";
+import dynamic from "next/dynamic";
+import UserCardSkeleton from "../Loader/UserCardSkeleton";
 
 type props = {
   type: "user" | "search";
-  userId?: string;
 };
-const SearchBar = ({ type, userId }: props) => {
+const SearchBar = ({ type }: props) => {
   const [loader, setLoader] = useState(true);
   const [isSearchActive, setIsSearchActive] = useState(false);
   const [search, setSearch] = useState("");
   const [result, setResult] = useState<string[]>([]);
-
+  const debouncedSearchUser = debounce(async (query: string) => {
+    const searchResult = await searchUser(query);
+    setResult(searchResult);
+    setLoader(false);
+  }, 500);
   useEffect(() => {
     async function fetchSearchUsers() {
       if (type === "user") {
-        const result = await searchUser(search);
-        setResult(result);
-        setLoader(false);
-      } else {
+        debouncedSearchUser(search);
         setResult([]);
+      } else {
         if (search.length > 0) {
           const result = await searchUser(search);
           setResult(result);
         }
-        setLoader(false);
       }
+      setLoader(false);
     }
     fetchSearchUsers();
   }, [search]);
+  const UserCard = useMemo(
+    () =>
+      dynamic(() => import("@/components/cards/UserCard"), {
+        loading: () => <UserCardSkeleton />,
+        ssr: false,
+      }),
+    [search]
+  );
+
   if (type === "search") {
     return (
       <div>

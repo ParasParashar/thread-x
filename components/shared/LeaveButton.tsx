@@ -12,12 +12,6 @@ interface Buttonprops {
 const LeaveButton = ({ id, members }: Buttonprops) => {
   const router = useRouter();
 
-  // const onLeaveCommunity = async () => {
-  //   console.log("jflsjdf");
-  //   await removeUserFromCommunity(members, id);
-  //   toast.success("Success");
-  //   router.refresh();
-  // };
   const onLeaveCommunity = useCallback(
     async (e: React.MouseEvent<HTMLButtonElement>) => {
       e.preventDefault();
@@ -28,7 +22,9 @@ const LeaveButton = ({ id, members }: Buttonprops) => {
       } catch (error) {
         toast.error("something went wrong");
       }
-    },[]);
+    },
+    []
+  );
 
   return (
     <button

@@ -1,9 +1,10 @@
-import ThreadCard from "@/components/cards/ThreadCard";
-import Comment from "@/components/forms/Comment";
 import { fetchThreadById } from "@/lib/actions/thread.action";
 import { fetchUser } from "@/lib/actions/user.actions";
 import { currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
+import ThreadCardSkeletion from "@/components/Loader/ThreadCardSkeletion";
+import dynamic from "next/dynamic";
+import CommentSkeleton from "@/components/Loader/CommentSkeleton";
 
 const page = async ({ params }: { params: { id: string } }) => {
   if (!params.id) return null;
@@ -21,6 +22,14 @@ const page = async ({ params }: { params: { id: string } }) => {
       </div>
     );
   }
+  const ThreadCard = dynamic(() => import("@/components/cards/ThreadCard"), {
+    loading: () => <ThreadCardSkeletion />,
+    ssr: false,
+  });
+  const Comment = dynamic(() => import("@/components/forms/Comment"), {
+    loading: () => <CommentSkeleton />,
+    ssr: false,
+  });
   return (
     <section className="relative">
       <div>

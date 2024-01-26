@@ -31,7 +31,7 @@
     "lodash": "^4.17.21",
     "lucide-react": "^0.271.0",
     "mongoose": "^7.5.0",
-    "next": "13.4.19",
+    "next": "^14.1.0",
     "next-cloudinary": "^4.20.0",
     "postcss": "8.4.28",
     "pusher": "^5.1.3",

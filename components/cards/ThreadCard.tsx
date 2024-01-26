@@ -59,7 +59,9 @@ const ThreadCard = ({
       )}
       <article
         className={`flex flex-col w-full lg:w-8/12 xl:9/12 md:9/12  rounded-2xl ${
-          isComment ? "px-0 ma-sm:px-7 p-1" : "bg-dark-2 p-7 mt-5  shadow-xl border-y-[3px]  border-[#262626]"
+          isComment
+            ? "px-0 ma-sm:px-7 p-1"
+            : "bg-dark-2 p-7 mt-5  shadow-xl border-y-[3px]  border-[#262626]"
         }`}
       >
         <div className="flex items-start justify-between">
@@ -116,30 +118,34 @@ const ThreadCard = ({
                   </Link>
                 </div>
                 <div className="flex items-center gap-3">
-                <Link href={`/thread/${id}`} className="flex items-center">
-                  {comments.length > 0 && (
-                    <>
-                      {comments.slice(0,2).map((comment: any, index: number) => (
-                       <div
-                       key={index}
-                       className="relative w-6 h-6 rounded-full object-cover"
-                     >
-                       <Image
-                         src={comment?.author?.image || './assets/user.svg'}
-                         alt='commentator profile image'
-                         fill
-                         className={`${
-                           index !== 0 && "-ml-2"
-                         } rounded-full object-cover`}
-                       />
-                     </div>
-                      ))}
+                  <Link href={`/thread/${id}`} className="flex items-center">
+                    {comments.length > 0 && (
+                      <>
+                        {comments
+                          .slice(0, 2)
+                          .map((comment: any, index: number) => (
+                            <div
+                              key={index}
+                              className="relative w-6 h-6 rounded-full object-cover"
+                            >
+                              <Image
+                                src={
+                                  comment?.author?.image || "./assets/user.svg"
+                                }
+                                alt="commentator profile image"
+                                fill
+                                className={`${
+                                  index !== 0 && "-ml-2"
+                                } rounded-full object-cover`}
+                              />
+                            </div>
+                          ))}
                         <p className="mt-1 text-[15px] text-gray-400 hover:text-neutral-200 span-x-2 ">
                           {comments?.length}&nbsp;
                           {comments?.length > 1 ? <>replies</> : <>reply</>}
                         </p>
-                    </>
-                  )}
+                      </>
+                    )}
                   </Link>
                   {likes.length > 0 && (
                     <p className="mt-1 text-[15px] text-gray-400 hover:text-neutral-200  ">

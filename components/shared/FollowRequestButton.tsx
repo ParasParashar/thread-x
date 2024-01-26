@@ -3,6 +3,8 @@
 import useFollow from "@/app/hooks/useFollow";
 import { useEffect, useState } from "react";
 import SmallLoader from "./SmallLoader";
+import { Skeleton } from "../ui/skeleton";
+import ButtonLoader from "../Loader/ButtonLoader";
 
 interface Props {
   currentUserId: string;
@@ -23,9 +25,7 @@ const FolloRequestButton = ({ currentUserId, followUserId }: Props) => {
   return (
     <button onClick={(e: any) => toggleFollowed(e)}>
       {loading ? (
-        <div>
-          <SmallLoader />
-        </div>
+        <ButtonLoader />
       ) : (
         <>
           {hasFollowed ? (

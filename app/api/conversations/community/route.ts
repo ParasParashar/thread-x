@@ -11,7 +11,6 @@ export async function POST(
         connectToDB();
         const body = await request.json();
         const { currentUserId, communityId } = body;
-        console.log(communityId);
         const community = await Community.findOne({ _id: communityId });
         if (!community) throw new Error("Community not found");
         const communityMessages = await Message.find(

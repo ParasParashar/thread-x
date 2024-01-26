@@ -10,7 +10,7 @@ import ChatArea from "@/components/chats/ChatArea";
 const Page = async ({ params }: { params: { id: string } }) => {
   const user = await currentUser();
   if (!user) redirect("/sign-in");
-  const currentUserInfo =await fetchUser(user.id);
+  const currentUserInfo = await fetchUser(user.id);
   const userInfo = await fetchUser(params.id);
 
   return (
@@ -22,7 +22,11 @@ const Page = async ({ params }: { params: { id: string } }) => {
         userId={userInfo.id}
       />
       <ChatArea currentUserId={currentUserInfo._id} userId={userInfo._id} />
-      <ChatInput currentUserId={currentUserInfo._id} userId={userInfo._id} type="chat" />
+      <ChatInput
+        currentUserId={currentUserInfo._id}
+        userId={userInfo._id}
+        type="chat"
+      />
     </div>
   );
 };

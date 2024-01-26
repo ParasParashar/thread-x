@@ -11,7 +11,7 @@ export default async function Page() {
   return (
     <section>
       <h1 className="head-text font-light text-gray-600 mb-5">Search</h1>
-      <SearchBar type="user" userId={user.id} />
+      <SearchBar type="user" />
     </section>
   );
 }

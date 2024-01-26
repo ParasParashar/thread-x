@@ -12,7 +12,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import { Input } from "../ui/input";
 import { CommentValidation } from "@/lib/validations/thread";
 import Image from "next/image";
@@ -24,7 +23,6 @@ interface props {
   currentUserId: string;
 }
 const Comment = ({ threadId, currentUserImg, currentUserId }: props) => {
-  const router = useRouter();
   const pathname = usePathname();
   const form = useForm<z.infer<typeof CommentValidation>>({
     resolver: zodResolver(CommentValidation),
@@ -34,11 +32,11 @@ const Comment = ({ threadId, currentUserImg, currentUserId }: props) => {
   });
   const onSubmit = async (values: z.infer<typeof CommentValidation>) => {
     await addCommentToThread(
-        threadId,
-        values.thread,
-        JSON.parse(currentUserId),
-        pathname
-    )
+      threadId,
+      values.thread,
+      JSON.parse(currentUserId),
+      pathname
+    );
     form.reset();
   };
   return (
@@ -55,13 +53,13 @@ const Comment = ({ threadId, currentUserImg, currentUserId }: props) => {
               <FormItem className="flex items-center gap-3 w-full ">
                 <FormLabel>
                   <div className="relative w-16 h-16 object-cover">
-                  <Image
-                    src={currentUserImg}
-                    alt="Profile Image"
-                    className="rounded-full object-cover"
-                   fill
+                    <Image
+                      src={currentUserImg}
+                      alt="Profile Image"
+                      className="rounded-full object-cover"
+                      fill
                     />
-                    </div>
+                  </div>
                 </FormLabel>
                 <FormControl className="border-none bg-transparent">
                   <Input
@@ -76,7 +74,7 @@ const Comment = ({ threadId, currentUserImg, currentUserId }: props) => {
             )}
           />
           <Button type="submit" className="bg-blue-500 rounded-[30px]">
-           Reply
+            Reply
           </Button>
         </form>
       </Form>

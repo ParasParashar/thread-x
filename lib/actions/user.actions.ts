@@ -348,10 +348,10 @@ export default async function searchUser(searchQuery: string) {
         const userData = await currentUser();
         const userId = userData?.id;
         const user = await User.find({
-            id: { $ne: userId }
-        });
+            id: { $ne: userId },
+        })
         const filterSearch = user.filter((user) =>
-            user.name.split(' ').join('').toLowerCase().includes(searchQuery.split(' ').join('').toLowerCase())
+            user.name.split(' ').join('').toLowerCase().trim().includes(searchQuery.split(' ').join('').toLowerCase().trim())
         )
         return filterSearch;
     } catch (error) {

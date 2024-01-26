@@ -1,15 +1,24 @@
-import CommunityCard from "@/components/cards/CommunityCard";
 import { fetchCommunities } from "@/lib/actions/community.action";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { AiOutlinePlus } from "react-icons/ai";
 import { currentUser } from "@clerk/nextjs";
 import Model from "@/components/shared/Model";
 import { redirect } from "next/navigation";
+import dynamic from "next/dynamic";
+import CommunityCardSkeleton from "@/components/Loader/CommunityCardSkeleton";
 
 const page = async () => {
   const user = await currentUser();
   if (!user) redirect("/sign-in");
   const allCommunities = await fetchCommunities();
+  const CommunityCard = dynamic(
+    () => import("@/components/cards/CommunityCard"),
+    {
+      loading: () => <CommunityCardSkeleton />,
+      ssr: false,
+    }
+  );
+
   return (
     <>
       <div className="flex items-center justify-between">
@@ -32,7 +41,7 @@ const page = async () => {
       <section className="mt-9 flex flex-wrap gap-4">
         {allCommunities.length === 0 ? (
           <p className="head-text text-gray-700 text-center">
-           !!! No Communites Found
+            !!! No Communites Found
           </p>
         ) : (
           <>

@@ -4,23 +4,23 @@ import {
   fetchUser,
   fetchUserPosts,
   filterUserFollowers,
-  filterUserFollowing,
   getUserReplies,
 } from "@/lib/actions/user.actions";
+import ThreadCardSkeletion from "@/components/Loader/ThreadCardSkeletion";
 import { profileTabs } from "@/constants";
 import Image from "next/image";
 import Link from "next/link";
 import { FiExternalLink } from "react-icons/fi";
-import {TbMessage2} from 'react-icons/tb'
+import { TbMessage2 } from "react-icons/tb";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ThreadsTab from "@/components/shared/ThreadsTab";
 import CommunityCard from "@/components/cards/CommunityCard";
 import { userCommunity } from "@/lib/actions/community.action";
-import ProfileHeader from "@/components/shared/ProfileHeader";
-import ThreadCard from "@/components/cards/ThreadCard";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import FollowersModel from "@/components/shared/FollowersModel";
 import FollowAndUnfollow from "@/components/shared/FollowAndUnfollow";
+import dynamic from "next/dynamic";
+import ProfileHeaderSkeleton from "@/components/Loader/ProfileHeaderSkeleton";
 
 async function Page({ params }: { params: { id: string } }) {
   const user = await currentUser();
@@ -31,7 +31,17 @@ async function Page({ params }: { params: { id: string } }) {
   const totalParentThreads = await fetchUserPosts(userInfo.id);
   const userCommunityFind = await userCommunity(userInfo._id);
   const followers = await filterUserFollowers(userInfo._id);
- 
+  const ThreadCard = dynamic(() => import("@/components/cards/ThreadCard"), {
+    loading: () => <ThreadCardSkeletion />,
+    ssr: false,
+  });
+  const ProfileHeader = dynamic(
+    () => import("@/components/shared/ProfileHeader"),
+    {
+      loading: () => <ProfileHeaderSkeleton />,
+      ssr: false,
+    }
+  );
   return (
     <section>
       <div className="flex items-center justify-between">
@@ -47,20 +57,20 @@ async function Page({ params }: { params: { id: string } }) {
           <Dialog>
             <DialogTrigger asChild>
               <p className="ml-1 rounded-sm text-gray-500 font-semibold hover:text-gray-600 px-2 py-1 cursor-pointer flex items-center gap-2">
-                {followers.slice(0,2).map((user, index) => (
-                   <div
-                   key={index}
-                   className="relative w-8 h-8 rounded-full object-cover"
-                 >
-                   <Image
-                     src={user.image}
-                     alt={`user_${index}`}
-                     fill
-                     className={`${
-                       index !== 0 && "-ml-5"
-                     } rounded-full object-cover`}
-                   />
-                 </div>
+                {followers.slice(0, 2).map((user, index) => (
+                  <div
+                    key={index}
+                    className="relative w-8 h-8 rounded-full object-cover"
+                  >
+                    <Image
+                      src={user.image}
+                      alt={`user_${index}`}
+                      fill
+                      className={`${
+                        index !== 0 && "-ml-5"
+                      } rounded-full object-cover`}
+                    />
+                  </div>
                 ))}
                 <span className="text-gray-400 font-light ">
                   {followers.length}+
@@ -70,20 +80,22 @@ async function Page({ params }: { params: { id: string } }) {
             </DialogTrigger>
             <FollowersModel userId={userInfo._id} id={user.id} />
           </Dialog>
-            </div>
-          <div className="flex gap-5 items-center p-2">
-
-        {user.id !== userInfo.id && (
-          <>
-          <FollowAndUnfollow currentUserId={user.id} followUserId={params.id} />
-          <Link href={`/messages/${params.id}`} className="unfollow-button">
-            <TbMessage2 className='mr-1'/>
-            Message
-            </Link>
-          </>
+        </div>
+        <div className="flex gap-5 items-center p-2">
+          {user.id !== userInfo.id && (
+            <>
+              <FollowAndUnfollow
+                currentUserId={user.id}
+                followUserId={params.id}
+              />
+              <Link href={`/messages/${params.id}`} className="unfollow-button">
+                <TbMessage2 className="mr-1" />
+                Message
+              </Link>
+            </>
           )}
-          </div>
-          </div>
+        </div>
+      </div>
       <div className="mt-9">
         <Tabs defaultValue="threads" className="w-full">
           <TabsList className="tab">

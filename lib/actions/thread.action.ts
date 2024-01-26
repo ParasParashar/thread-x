@@ -12,7 +12,7 @@ interface params {
     image?: string;
 
 }
-export async function createthread({ text, communityId, author ,image }: params) {
+export async function createthread({ text, communityId, author, image }: params) {
     try {
         connectToDB();
         const communityIdObject = await Community.findOne(
@@ -176,29 +176,29 @@ export async function deleteThread(currentUserId: string, threadId: string) {
 
     }
 }
-export async function findThreadOfUserFollowing(currentUserId:string){
+export async function findThreadOfUserFollowing(currentUserId: string) {
     try {
         connectToDB();
-        const user = await User.findOne({id:currentUserId});
-        if(!user) throw new Error('User not found');
+        const user = await User.findOne({ id: currentUserId });
+        if (!user) throw new Error('User not found');
         const threads = await Thread.find({
-                parentId:{$in:[null,undefined]},
-                author:{$in:user.following}
+            parentId: { $in: [null, undefined] },
+            author: { $in: user.following }
         })
-        .populate({
-            path:'children',
-            model:Thread,
-            populate:{
-                path:'author',
-                model:User,
-                select: '_id ,name,parentId,image'
-            }
-        })
-        .populate({ path: 'community', model: 'Community' })
-        .populate({path:'author',model:'User'})
-        .sort({ createdAt: 'desc' });
-         return threads;
-    } catch (error:any) {
-        throw new Error('Something Went Wrong'+error.message);
+            .populate({
+                path: 'children',
+                model: Thread,
+                populate: {
+                    path: 'author',
+                    model: User,
+                    select: '_id ,name,parentId,image'
+                }
+            })
+            .populate({ path: 'community', model: 'Community' })
+            .populate({ path: 'author', model: 'User' })
+            .sort({ createdAt: 'desc' });
+        return threads;
+    } catch (error: any) {
+        throw new Error('Something Went Wrong' + error.message);
     }
 }

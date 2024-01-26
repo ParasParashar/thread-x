@@ -1,4 +1,4 @@
-import { filterUserFavorite} from "@/lib/actions/user.actions";
+import { filterUserFavorite } from "@/lib/actions/user.actions";
 import axios from "axios";
 import { redirect, useRouter } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";
@@ -9,26 +9,26 @@ type props = {
 }
 
 const useFavorite = ({ currentUserId, id }: props) => {
-    const data = {currentUserId,id}
+    const data = { currentUserId, id }
     const router = useRouter();
     const [hasFavorited, setHasFavorited] = useState(false);
 
     useEffect(() => {
-        async function checkFavorite () {
+        async function checkFavorite() {
             try {
                 if (!currentUserId) {
-                router.push('/sign-in')
+                    router.push('/sign-in')
                     return;
                 }
                 setHasFavorited(false);
-    
+
                 const hasFavorite = await filterUserFavorite(currentUserId, id);
                 setHasFavorited(hasFavorite);
             } catch (error) {
                 console.error('Error checking favorite:', error);
             }
         }
-    
+
         checkFavorite();
     }, [currentUserId, id]);
     const toggleFavorite = useCallback(async (e: React.MouseEvent<HTMLDivElement>) => {
@@ -41,16 +41,16 @@ const useFavorite = ({ currentUserId, id }: props) => {
 
             let request;
             if (hasFavorited) {
-                request = ()=>axios.delete('/api/favorite',{data})
+                request = () => axios.delete('/api/favorite', { data })
                 router.refresh();
             } else {
-                request = ()=>axios.post('/api/favorite',data)
+                request = () => axios.post('/api/favorite', data)
                 router.refresh();
             }
-                await request(); 
-                setHasFavorited(!hasFavorited);
-                router.refresh();
-        }  catch (error:any) {
+            await request();
+            setHasFavorited(!hasFavorited);
+            router.refresh();
+        } catch (error: any) {
             throw new Error(`Something Went Wrong: ${error.message}`);
         }
     }, [currentUserId, hasFavorited, id, router]);

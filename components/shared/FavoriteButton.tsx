@@ -10,20 +10,19 @@ type props = {
 
 const Favorite = ({ currentUserId, id }: props) => {
   const [isScaling, setIsScaling] = useState(false);
-  const [check,setCheck]=useState(false);
+  const [check, setCheck] = useState(false);
   const { hasFavorited, toggleFavorite } = useFavorite({ currentUserId, id });
 
-  useEffect(()=>{
+  useEffect(() => {
     setCheck(hasFavorited);
-  },[hasFavorited]);
-
+  }, [hasFavorited]);
 
   const handleButtonClick = (e: React.MouseEvent<HTMLDivElement>) => {
-      toggleFavorite(e);
-      setIsScaling(true);
+    toggleFavorite(e);
+    setIsScaling(true);
     setTimeout(() => {
       setIsScaling(false);
-    }, 500); 
+    }, 500);
   };
 
   return (
@@ -33,9 +32,9 @@ const Favorite = ({ currentUserId, id }: props) => {
     >
       {check ? (
         <AiFillHeart
-        onClick={(e: any) => handleButtonClick(e)}
-        size={24}
-        className={`
+          onClick={(e: any) => handleButtonClick(e)}
+          size={24}
+          className={`
         text-rose-500
         ${
           isScaling
@@ -43,17 +42,17 @@ const Favorite = ({ currentUserId, id }: props) => {
             : ""
         }
         `}
-      /> 
-      ):(
-      <AiOutlineHeart size={24}  className={`
+        />
+      ) : (
+        <AiOutlineHeart
+          size={24}
+          className={`
       text-[#56567b]
       ${
-        isScaling
-          ? "transform scale-150 transition-transform duration-200"
-          : ""
+        isScaling ? "transform scale-150 transition-transform duration-200" : ""
       }
-      `} />
-
+      `}
+        />
       )}
     </div>
   );

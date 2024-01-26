@@ -38,7 +38,7 @@ export function formatThreadCount(count: number): string {
     return `${threadCount} ${threadWord}`;
   }
 }
-export function formatTimestamp(timestamp:string) {
+export function formatTimestamp(timestamp: string) {
   const date = new Date(timestamp);
   if (isToday(date)) {
     return `today at ${format(date, "p")}`;
@@ -47,4 +47,18 @@ export function formatTimestamp(timestamp:string) {
   } else {
     return format(date, "MMM dd yyyy 'at' p");
   }
+}
+
+export function debounce(fn: Function, time: number) {
+  let timeoutId: NodeJS.Timeout | null = null;
+
+  return (...args: any[]) => {
+    if (timeoutId) clearTimeout(timeoutId);
+    // @ts-ignore
+    let context: any = this;
+    timeoutId = setTimeout(() => {
+      fn.apply(context, args);
+      timeoutId = null;
+    }, time);
+  };
 }

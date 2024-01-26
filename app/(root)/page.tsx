@@ -1,18 +1,19 @@
-"use server";
-import ThreadCard from "@/components/cards/ThreadCard";
+import ThreadCardSkeletion from "@/components/Loader/ThreadCardSkeletion";
+import FollowingUserComponents from "@/components/shared/FollowingUserComponents";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  fetchPosts,
-  findThreadOfUserFollowing,
-} from "@/lib/actions/thread.action";
+import { fetchPosts } from "@/lib/actions/thread.action";
 import { currentUser } from "@clerk/nextjs";
+import dynamic from "next/dynamic";
 import { redirect } from "next/navigation";
 
 export default async function Home() {
   const user = await currentUser();
-  if (!user) redirect("/sign-in");
+  if (!user?.id) redirect("/sign-in");
   const result = await fetchPosts(1, 20);
-  const followingResult = await findThreadOfUserFollowing(user.id);
+  const ThreadCard = dynamic(() => import("@/components/cards/ThreadCard"), {
+    loading: () => <ThreadCardSkeletion />,
+    ssr: false,
+  });
   return (
     <Tabs defaultValue="forYou">
       <div className="w-56 mx-auto ">
@@ -52,29 +53,7 @@ export default async function Home() {
           </section>
         </TabsContent>
         <TabsContent value="followings">
-          <section className="mt-9 felx flex-col gap-10 ">
-            {followingResult.length === 0 ? (
-              <p className="text-lg text-center font-mono">No threads</p>
-            ) : (
-              <>
-                {followingResult.map((post: any) => (
-                  <ThreadCard
-                    key={post._id}
-                    id={post.id}
-                    currentUserId={user?.id || ""}
-                    parentId={post.parentId}
-                    content={post.text}
-                    author={post.author}
-                    community={post.community}
-                    createdAt={post.createdAt}
-                    comments={post.children}
-                    image={post.image}
-                    likes={post.likes}
-                  />
-                ))}
-              </>
-            )}
-          </section>
+          <FollowingUserComponents />
         </TabsContent>
       </div>
     </Tabs>

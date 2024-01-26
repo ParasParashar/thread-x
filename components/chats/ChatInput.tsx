@@ -31,7 +31,6 @@ const ChatInput = ({ userId, currentUserId, communityId, type }: Props) => {
         .then((res) => {
           if (!res.data) {
             toast.error("Only Member can send the message");
-            console.log('work')
           }
         })
         .catch(() => toast.error("Only Member can send the message"));

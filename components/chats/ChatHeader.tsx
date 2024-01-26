@@ -18,8 +18,8 @@ interface props {
 }
 
 const ChatHeader = ({ image, name, paramId, userId }: props) => {
-  const {members} = useActiveList();
-  const isActiveUsers =members.includes(paramId);
+  const { members } = useActiveList();
+  const isActiveUsers = members.includes(paramId);
   const router = useRouter();
   const [loader, setLoader] = useState(false);
   const [isShow, setIsShow] = useState(false);
@@ -34,9 +34,8 @@ const ChatHeader = ({ image, name, paramId, userId }: props) => {
     router.back();
   }, [paramId, router]);
 
-
   return (
-    <nav className="bg-[#272727] p-1 px-3 rounded-t-lg flex items-center justify-between">
+    <nav className="bg-[#272727] p-1 px-3 rounded-t-lg flex items-center justify-between w-full">
       <div className="flex items-center gap-2">
         <div className="relative h-14 w-14 object-cover">
           <Link href={`/profile/${paramId}`}>
@@ -56,9 +55,10 @@ const ChatHeader = ({ image, name, paramId, userId }: props) => {
         </Link>
       </div>
       <div className="relative cursor-pointer">
-        <div 
-        onClick={handleShow}
-        className="p-2 rounded-full hover:bg-[#373737]">
+        <div
+          onClick={handleShow}
+          className="p-2 rounded-full hover:bg-[#373737]"
+        >
           <BsThreeDotsVertical onClick={handleShow} size="20" />
         </div>
         {isShow && (
@@ -70,7 +70,7 @@ const ChatHeader = ({ image, name, paramId, userId }: props) => {
                 onClick={handleDeleteChats}
                 className="shadow-xl flex gap-1 items-center rounded-md text-sm cursor-pointer p-2 hover:text-red-500 text-white"
               >
-                <RiDeleteBin6Line size={20}/>
+                <RiDeleteBin6Line size={20} />
                 Delete from Everyone
               </button>
             )}

@@ -1,13 +1,12 @@
 import { currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
-import ThreadCard from "@/components/cards/ThreadCard";
+import ThreadCardSkeletion from "@/components/Loader/ThreadCardSkeletion";
 import {
   fetchUser,
   fetchUserPosts,
   filterUserFollowers,
   getUserReplies,
 } from "@/lib/actions/user.actions";
-import ProfileHeader from "@/components/shared/ProfileHeader";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { profileTabs } from "@/constants";
@@ -19,7 +18,8 @@ import { userCommunity } from "@/lib/actions/community.action";
 import CommunityCard from "@/components/cards/CommunityCard";
 import { BiEditAlt } from "react-icons/bi";
 import FollowersModel from "@/components/shared/FollowersModel";
-import toast from "react-hot-toast";
+import dynamic from "next/dynamic";
+import ProfileHeaderSkeleton from "@/components/Loader/ProfileHeaderSkeleton";
 async function Page() {
   const user = await currentUser();
   if (!user) return null;
@@ -29,6 +29,18 @@ async function Page() {
   const totalParentThreads = await fetchUserPosts(userInfo.id);
   const userCommunityFind = await userCommunity(userInfo._id);
   const followers = await filterUserFollowers(userInfo._id);
+  const ThreadCard = dynamic(() => import("@/components/cards/ThreadCard"), {
+    loading: () => <ThreadCardSkeletion />,
+    ssr: false,
+  });
+  const ProfileHeader = dynamic(
+    () => import("@/components/shared/ProfileHeader"),
+    {
+      loading: () => <ProfileHeaderSkeleton />,
+      ssr: false,
+    }
+  );
+
   return (
     <section>
       <div className="flex justify-between items-center">

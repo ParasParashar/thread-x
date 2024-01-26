@@ -18,7 +18,7 @@ const PostThread = ({ userId, userCommunityId }: Props) => {
   });
   const [image, setImage] = useState("");
 
-  const handleInputChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -30,7 +30,7 @@ const PostThread = ({ userId, userCommunityId }: Props) => {
     setImage(selectedImage);
   };
 
-  const onSubmit = async (e:React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     await createthread({
       text: formData.thread,
@@ -38,8 +38,8 @@ const PostThread = ({ userId, userCommunityId }: Props) => {
       communityId: formData.community !== "" ? formData.community : null,
       image: image,
     });
-    toast.success('New Thread Created');
-    router.push('/');
+    toast.success("New Thread Created");
+    router.push("/");
   };
 
   return (
@@ -54,9 +54,10 @@ const PostThread = ({ userId, userCommunityId }: Props) => {
             name="thread"
             required
             rows={6}
+            autoFocus
             className="account-form-input no-focus p-2"
             value={formData.thread}
-            onChange={(e:any)=>handleInputChange(e)}
+            onChange={(e: any) => handleInputChange(e)}
           />
         </div>
 
@@ -72,32 +73,36 @@ const PostThread = ({ userId, userCommunityId }: Props) => {
             name="community"
             className="bg-dark-1 bg-gray-300 p-3"
             value={formData.community}
-            onChange={(e:any)=>handleInputChange(e)}
+            onChange={(e: any) => handleInputChange(e)}
             placeholder=" Select where you want to create Thread."
             style={{ width: "100%" }}
           >
             {userCommunityId.length === 0 ? (
               <>
-              <option value="">Personal Thread</option>
+                <option value="">Personal Thread</option>
               </>
             ) : (
               userCommunityId.map((community: any) => (
                 <>
-                <option
-                  key={community._id}
-                  value={community._id}
-                  className="bg-dark-2 text-white p-3"
-                  style={{ cursor: "pointer" }}
+                  <option
+                    key={community._id}
+                    value={community._id}
+                    className="bg-dark-2 text-white p-3"
+                    style={{ cursor: "pointer" }}
                   >
-                  {community.name}
-                </option>
-              <option className="p-3" value="">Personal Thread</option>
-                  </>
+                    {community.name}
+                  </option>
+                  <option className="p-3" value="">
+                    Personal Thread
+                  </option>
+                </>
               ))
             )}
           </select>
           {userCommunityId.length === 0 && (
-              <span className="text-gray-700 p-1 text-sm">You Dont't have any community to create thread. </span>
+            <span className="text-gray-700 p-1 text-sm">
+              You Dont't have any community to create thread.{" "}
+            </span>
           )}
         </div>
 

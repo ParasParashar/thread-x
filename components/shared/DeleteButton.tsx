@@ -10,17 +10,22 @@ interface props {
   type: "community" | "user";
   communityId?: string;
 }
-const DeleteButton = ({ currentUserId, threadId, type, communityId }: props) => {
+const DeleteButton = ({
+  currentUserId,
+  threadId,
+  type,
+  communityId,
+}: props) => {
   const router = useRouter();
   const handleDelete = async (currentUserId: string, threadId: string) => {
     await deleteThread(currentUserId, threadId);
-    toast.success('Thread Deleted Successfully');
+    toast.success("Thread Deleted Successfully");
     router.refresh();
   };
 
   const handleDeleteCommunity = async (communityId: string) => {
     await deleteCommunity(communityId);
-    toast.success('Community Deleted Successfully')
+    toast.success("Community Deleted Successfully");
     router.refresh();
   };
 
@@ -28,13 +33,13 @@ const DeleteButton = ({ currentUserId, threadId, type, communityId }: props) => 
     <div>
       {type === "user" ? (
         <RiDeleteBin2Line
-          onClick={() => handleDelete(currentUserId || '', threadId || '')}
+          onClick={() => handleDelete(currentUserId || "", threadId || "")}
           size={30}
           className="absolute top-2 mb-3 z-10 right-3 cursor-pointer text-gray-400 hover:text-rose-500"
         />
       ) : (
         <RiDeleteBin2Line
-          onClick={() => handleDeleteCommunity(communityId || '')}
+          onClick={() => handleDeleteCommunity(communityId || "")}
           size={30}
           className=" mb-3 z-10 cursor-pointer text-gray-400 hover:text-rose-500"
         />

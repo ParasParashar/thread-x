@@ -10,19 +10,20 @@ type props = {
   followUserId: string;
 };
 const UnfollowButton = ({ currentUserId, followUserId }: props) => {
-  const router =useRouter();
-    const handleUnfollow =useCallback(async(e:React.MouseEvent<HTMLButtonElement>)=>{
+  const router = useRouter();
+  const handleUnfollow = useCallback(
+    async (e: React.MouseEvent<HTMLButtonElement>) => {
       e.preventDefault();
-        await unfollowUser(currentUserId,followUserId);
-        toast.success('Unfollow Successfully')
-        router.refresh();
-    },[]);
+      await unfollowUser(currentUserId, followUserId);
+      toast.success("Unfollow Successfully");
+      router.refresh();
+    },
+    []
+  );
   return (
-    <div>
-      <button 
-      onClick={handleUnfollow}
-       className="unfollow-button">Unfollow</button>
-    </div>
+    <button onClick={handleUnfollow} className="unfollow-button">
+      Unfollow
+    </button>
   );
 };
 
